@@ -1,11 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useLocation } from 'react-router-dom';
-import { signInAxios, signUpAxios } from "../modules/redux/user";
 
 import Button from "./Button";
 
+<<<<<<< HEAD
 
 const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 	const dispatch = useDispatch();
@@ -74,6 +72,10 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 
 	
 	if(loggedIn) return (<Navigate to="/" replace />)
+=======
+const Signup = ({type}) => {
+  console.log(type)
+>>>>>>> parent of fb51ee7 (Feat: signup 추가)
 	return (
 		<div className="content">
 			<section>
@@ -87,24 +89,14 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 						<InputArea className="input_area text">
 							<InputLabel>ID</InputLabel>
 							<InputBox className="input_box">
-								<input
-									type="text"
-									placeholder="아이디를 입력해주세요."
-									onChange={(e) => setUsername(e.target.value)}
-								/>
-								{ (clicked && username.trim().length <= 0) && <p className="txt_err">아이디를 입력해주세요.</p>}
+								<input type="text" placeholder="아이디를 입력해주세요." />
 							</InputBox>
 						</InputArea>
 						{type === "signup" && (
 							<InputArea className="input_area text">
 								<InputLabel>NICKNAME</InputLabel>
 								<InputBox className="input_box">
-									<input
-										type="text"
-										placeholder="닉네임을 입력해주세요."
-										onChange={(e) => (setNickname(e.target.value))}
-									/>
-									{ (clicked && nickname.trim().length <= 0) && <p className="txt_err">닉네임을 입력해주세요.</p>}
+									<input type="text" placeholder="닉네임을 입력해주세요." />
 								</InputBox>
 							</InputArea>
 						)}
@@ -112,33 +104,20 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 						<InputArea className="input_area text">
 							<InputLabel>PASSWORD</InputLabel>
 							<InputBox className="input_box">
-								<input
-									type="text"
-									placeholder="비밀번호를 입력해주세요."
-									onChange={(e) => setPw(e.target.value)}
-								/>
-								{ (clicked && pw.trim().length <= 0) && <p className="txt_err">비밀번호를 입력해주세요.</p>}
+								<input type="text" placeholder="비밀번호를 입력해주세요." />
 								{type === "signup" && (
-									<>
-									<input
-										type="text"
-										placeholder="비밀번호 확인"
-										onChange={(e) => (setPwcheck(e.target.value))}
-									/>
-									{ (clicked && pwcheck.trim().length <= 0) && <p className="txt_err">비밀번호를 입력해주세요.</p>}
-									{ ((clicked && pwcheck.trim().length > 0 && pw.trim() !== pwcheck.trim()) && <p className="txt_err">비밀번호가 일치하지 않습니다.</p>)}
-									</>
+									<input type="text" placeholder="비밀번호 확인" />
 								)}
 							</InputBox>
 						</InputArea>
 						<div className="btn_area">
 							<Button width="m">취소</Button>
 							{type === "signup" ? (
-								<Button width="m" st="primary" onClick={signUp}>
+								<Button width="m" st="primary">
 									가입하기
 								</Button>
 							) : (
-								<Button width="m" st="primary" onClick={signIn}>
+								<Button width="m" st="primary">
 									로그인
 								</Button>
 							)}
