@@ -52,7 +52,7 @@ const Detail = () => {
 	const commentData = useSelector((state) => state.comment.list)
 		// dispatch(loadContent(param.postId))
 
-	return (
+		return (
 		<div className="content">
 			<section>
 				<div className="set_inner">
@@ -62,7 +62,7 @@ const Detail = () => {
 					<ContentArea>
 						<div className="info_area">
 							<p>
-								<span className="nickname">nickname</span>
+							<span className="nickname">nickname</span>
 								<p className="score">
 									<em>행복지수</em>
 									<strong>
@@ -74,10 +74,14 @@ const Detail = () => {
 						</div>
 						<div class="content_area">
 							<p>	{thispost.length > 0 ? thispost[0].content : ''}
-							
+						
 							</p>
 						</div>
 					</ContentArea>
+					<div className="btn_area" style={{textAlign: 'right', marginTop: '60px'}}>
+					<Button>삭제</Button>
+					<Button st="primary">수정</Button>
+					</div>
 				</div>
 			</section>
 			<section>
@@ -93,12 +97,11 @@ const Detail = () => {
 										<textarea
 											type="text"
 											placeholder="자유롭게 의견을 작성해주세요."
-											ref={inputComment}
 										></textarea>
 									</div>
 								</InputBox>
                 <div className="btn_box">
-                  <Button st="primary" onClick={commentBox} >작성하기 </Button>
+								<Button st="primary" onClick={commentBox} >작성하기 </Button>
                 </div> 
 							</InputArea>
 						</div>
@@ -109,17 +112,15 @@ const Detail = () => {
 						<li>
 						<span>{v.id}</span>
 						<p>{v.comment}</p>
-					</li>
-				</ul>
-            </div>	
-				)
+						<div style={{marginTop: '20px'}}><Button height="xs" padding="s">삭제</Button><Button st="primary" height="xs" padding="s">수정</Button></div>
+						</li>
+              </ul>
+            </div>)
 			})}
 					</CommentArea>
           <div className="btn_area">
           <Button width="m">취소</Button>
-          <Button width="m" st="primary" >
-		  등록하기
-		 </Button>
+          <Button width="m" st="primary">등록하기</Button>
           </div>
 				</div>
 			</section>
