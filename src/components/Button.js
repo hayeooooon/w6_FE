@@ -37,6 +37,13 @@ const buttonHeight = css`
 			line-height: 30px;
 			font-size: 14px;
 		`}
+		${(props) =>
+		props.height === "xs" &&
+		css`
+			height: 26px;
+			line-height: 24px;
+			font-size: 14px;
+		`}
 `;
 
 const buttonWidth = css`
@@ -46,6 +53,14 @@ const buttonWidth = css`
 			min-width: 140px;
 			padding: 0;
 			text-align: center;
+		`}
+`;
+
+const paddingVariation = css`
+	${(props) =>
+		props.padding === "s" &&
+		css`
+			padding: 0 10px;
 		`}
 `;
 
@@ -68,14 +83,18 @@ const ButtonStyle = styled.button`
 	${styleVariation}
 	${buttonHeight}
 	${buttonWidth}
+	${paddingVariation}
   & + button {
 		margin-left: 12px;
 	}
+	&[height="xs"] + button[height="xs"] {
+		margin-left: 8px;
+	}
 `;
 
-function Button({ children, style, height, width, ...rest }) {
+function Button({ children, style, height, width, padding, ...rest }) {
 	return (
-		<ButtonStyle st={style} height={height} width={width} {...rest}>
+		<ButtonStyle st={style} height={height} width={width} padding={padding} {...rest}>
 			{children}
 		</ButtonStyle>
 	);

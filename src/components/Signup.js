@@ -1,10 +1,73 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate, useLocation } from 'react-router-dom';
+import { signInAxios, signUpAxios } from "../modules/redux/user";
 
 import Button from "./Button";
 
-const Signup = ({type}) => {
-  console.log(type)
+
+const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
+	const dispatch = useDispatch();
+	const location = useLocation();
+	const [pathname, setPathname] = useState(type);
+	const userInfoState = useSelector(state=>state.user.user);
+	const [username, setUsername] = useState("");
+	const [pw, setPw] = useState("");
+	const [pwcheck, setPwcheck] = useState('')
+	const [nickname, setNickname] = useState('')
+	const [clicked, setClicked] = useState(false);
+
+	
+	const signUp = () => {
+		setClicked(true);
+		const inputs = [username, nickname, pw, pwcheck];
+		for(let i=0; i<inputs.length; i++){
+			if(inputs[i].trim().length <= 0){
+				return false;
+			}
+			if(pw.trim() !== pwcheck.trim()){
+				return false;
+			}
+			if( i >= inputs.length - 1 ){
+				const data = {
+					username: username,
+					nickname: nickname,
+					pw: pw,
+					pwcheck: pwcheck,
+				};
+				dispatch(signUpAxios(data));
+				setClicked(false);
+			}
+		}
+	};
+	const signIn = () => {
+		setClicked(true);
+		const inputs = [username, pw];
+		for(let i=0; i<inputs.length; i++){
+			if(inputs[i].trim().length <= 0){
+				return false;
+			}
+			if( i >= inputs.length - 1 ){
+				const data = {
+					username: username,
+					pw: pw,
+				};
+				dispatch(signInAxios(data));
+				setClicked(false);
+			}
+		}
+	};
+	useEffect(()=>{
+		if(userInfoState.length > 0){
+			console.log('got user info')
+			setLoggedIn(true);
+			setUserInfo(...userInfoState);
+		}
+	}, [userInfoState]);
+
+	
+	if(loggedIn) return (<Navigate to="/" replace />)
 	return (
 		<div className="content">
 			<section>
@@ -18,14 +81,24 @@ const Signup = ({type}) => {
 						<InputArea className="input_area text">
 							<InputLabel>ID</InputLabel>
 							<InputBox className="input_box">
-								<input type="text" placeholder="아이디를 입력해주세요." />
+								<input
+									type="text"
+									placeholder="아이디를 입력해주세요."
+									onChange={(e) => setUsername(e.target.value)}
+								/>
+								{ (clicked && username.trim().length <= 0) && <p className="txt_err">아이디를 입력해주세요.</p>}
 							</InputBox>
 						</InputArea>
 						{type === "signup" && (
 							<InputArea className="input_area text">
 								<InputLabel>NICKNAME</InputLabel>
 								<InputBox className="input_box">
-									<input type="text" placeholder="닉네임을 입력해주세요." />
+									<input
+										type="text"
+										placeholder="닉네임을 입력해주세요."
+										onChange={(e) => (setNickname(e.target.value))}
+									/>
+									{ (clicked && nickname.trim().length <= 0) && <p className="txt_err">닉네임을 입력해주세요.</p>}
 								</InputBox>
 							</InputArea>
 						)}
@@ -33,20 +106,33 @@ const Signup = ({type}) => {
 						<InputArea className="input_area text">
 							<InputLabel>PASSWORD</InputLabel>
 							<InputBox className="input_box">
-								<input type="text" placeholder="비밀번호를 입력해주세요." />
+								<input
+									type="text"
+									placeholder="비밀번호를 입력해주세요."
+									onChange={(e) => setPw(e.target.value)}
+								/>
+								{ (clicked && pw.trim().length <= 0) && <p className="txt_err">비밀번호를 입력해주세요.</p>}
 								{type === "signup" && (
-									<input type="text" placeholder="비밀번호 확인" />
+									<>
+									<input
+										type="text"
+										placeholder="비밀번호 확인"
+										onChange={(e) => (setPwcheck(e.target.value))}
+									/>
+									{ (clicked && pwcheck.trim().length <= 0) && <p className="txt_err">비밀번호를 입력해주세요.</p>}
+									{ ((clicked && pwcheck.trim().length > 0 && pw.trim() !== pwcheck.trim()) && <p className="txt_err">비밀번호가 일치하지 않습니다.</p>)}
+									</>
 								)}
 							</InputBox>
 						</InputArea>
 						<div className="btn_area">
 							<Button width="m">취소</Button>
 							{type === "signup" ? (
-								<Button width="m" st="primary">
+								<Button width="m" st="primary" onClick={signUp}>
 									가입하기
 								</Button>
 							) : (
-								<Button width="m" st="primary">
+								<Button width="m" st="primary" onClick={signIn}>
 									로그인
 								</Button>
 							)}
