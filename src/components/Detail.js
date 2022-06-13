@@ -16,15 +16,15 @@ const Detail = () => {
 						<div className="info_area">
 							<p>
 								<span className="nickname">Nickname</span>
-								<p className="score">
+								<span className="score">
 									<em>행복지수</em>
 									<strong>
 										좋음 <i>😆</i>
 									</strong>
-								</p>
+								</span>
 							</p>
 						</div>
-						<div class="content_area">
+						<div className="content_area">
 							<p>
 								내용 영역입니다. 내용 영역입니다. 내용 영역입니다. 내용
 								영역입니다. 내용 영역입니다. 내용 영역입니다. 내용 영역입니다.
