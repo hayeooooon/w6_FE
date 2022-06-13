@@ -6,7 +6,6 @@ import { signInAxios, signUpAxios } from "../modules/redux/user";
 
 import Button from "./Button";
 
-
 const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 	const dispatch = useDispatch();
 	const location = useLocation();
@@ -68,6 +67,7 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 
 	
 	if(loggedIn) return (<Navigate to="/" replace />)
+
 	return (
 		<div className="content">
 			<section>
