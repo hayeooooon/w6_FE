@@ -1,10 +1,57 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import Button from "./Button";
 import img_3 from "../images/img_3.jpeg";
 
+import {createHappy, loadContent} from "../redux/modules/haedal";
+import {createComment} from"../redux/modules/comment";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+import {useParams} from "react-router-dom"
+import axios from "axios"
+
+//useEffect(() => {컴포넌트가 화면에 그려질때 실행할 함수}, [의존성 배열])
+//(*의존성배열 : 배열에 넣은 값이 변했을 때 첫번째 인자 다시 실행)
 const Detail = () => {
+	const inputComment = React.useRef(null);
+	const dispatch = useDispatch(null);
+	const param = useParams();
+	//console.log(param)
+	//todo: 메인-디테일 연결(postid)
+	const contentDetail = useSelector((state) => state.haedal.post);
+	
+	const [thispost, setThispost] = useState([])
+	//console.log(thispost)
+
+	useEffect(()=>{
+		setThispost(contentDetail)
+	},[contentDetail])
+	
+	useEffect(()=>{
+		dispatch(loadContent(param.postId))
+		//console.log("아무거나")
+	},[])
+	console.log(loadContent(param.postId))
+	//todo: 메인-디테일 연결(happypoint)
+	const scoreEmoji = ['😡','☹️','☺️','😆','😍'];
+	const scoreCharacter = ['최악','나쁨','보통','좋음','최상'];
+
+	//{scoreCharacter[v.happypoint-1]}
+
+	
+	//todo: 댓글
+	const commentBox = () => {
+		dispatch(createComment(
+		{
+			id :"일단 닉네임" ,
+			comment:inputComment.current.value,
+		}
+		));
+	};
+	const commentData = useSelector((state) => state.comment.list)
+		// dispatch(loadContent(param.postId))
+
 	return (
 		<div className="content">
 			<section>
@@ -15,36 +62,22 @@ const Detail = () => {
 					<ContentArea>
 						<div className="info_area">
 							<p>
-								<span className="nickname">Nickname</span>
-								<span className="score">
+								<span className="nickname">nickname</span>
+								<p className="score">
 									<em>행복지수</em>
 									<strong>
-										좋음 <i>😆</i>
+									{thispost.length > 0 ? scoreCharacter[thispost[0].happypoint-1]: ''} 
+									<i>{thispost.length > 0 ? scoreEmoji[thispost[0].happypoint-1]: ''}</i>
 									</strong>
-								</span>
+								</p>
 							</p>
 						</div>
-						<div className="content_area">
-							<p>
-								내용 영역입니다. 내용 영역입니다. 내용 영역입니다. 내용
-								영역입니다. 내용 영역입니다. 내용 영역입니다. 내용 영역입니다.
-								내용 영역입니다. 내용 영역입니다. 내용 영역입니다. 내용
-								영역입니다. 내용 영역입니다. 내용 영역입니다. 내용 영역입니다.
-								내용 영역입니다. 내용 영역입니다. 내용 영역입니다. 내용
-								영역입니다. 내용 영역입니다. 내용 영역입니다. 내용 영역입니다.
-								내용 영역입니다. 내용 영역입니다. 내용 영역입니다. 내용
-								영역입니다. 내용 영역입니다. 내용 영역입니다. 내용 영역입니다.
-								내용 영역입니다. 내용 영역입니다. 내용 영역입니다. 내용
-								영역입니다. 내용 영역입니다. 내용 영역입니다. 내용 영역입니다.
-								내용 영역입니다. 내용 영역입니다. 내용 영역입니다. 내용
-								영역입니다. 내용 영역입니다.
+						<div class="content_area">
+							<p>	{thispost.length > 0 ? thispost[0].content : ''}
+							
 							</p>
 						</div>
 					</ContentArea>
-					<div className="btn_area" style={{textAlign: 'right', marginTop: '60px'}}>
-					<Button>삭제</Button>
-					<Button st="primary">수정</Button>
-					</div>
 				</div>
 			</section>
 			<section>
@@ -60,37 +93,33 @@ const Detail = () => {
 										<textarea
 											type="text"
 											placeholder="자유롭게 의견을 작성해주세요."
+											ref={inputComment}
 										></textarea>
 									</div>
 								</InputBox>
                 <div className="btn_box">
-                  <Button st="primary">작성하기</Button>
+                  <Button st="primary" onClick={commentBox} >작성하기 </Button>
                 </div> 
 							</InputArea>
 						</div>
-						<div className="comment_view">
-              <ul>
-              <li>
-                  <span>user</span>
-                  <p>코멘트 입니다 코멘트 입니다 코멘트 입니다. 코멘트 입니다 코멘트 입니다 코멘트 입니다. 코멘트 입니다 코멘트 입니다 코멘트 입니다. 코멘트 입니다 코멘트 입니다 코멘트 입니다. 코멘트 입니다 코멘트 입니다 코멘트 입니다.</p>
-									<div style={{marginTop: '20px'}}><Button height="xs" padding="s">삭제</Button><Button st="primary" height="xs" padding="s">수정</Button></div>
-								</li>
-                <li>
-                  <span>Nickname</span>
-                  <p>코멘트 입니다 코멘트 입니다 코멘트 입니다. 코멘트 입니다 코멘트 입니다 코멘트 입니다. 코멘트 입니다 코멘트 입니다 코멘트 입니다. 코멘트 입니다 코멘트 입니다 코멘트 입니다. 코멘트 입니다 코멘트 입니다 코멘트 입니다.</p>
-									<div style={{marginTop: '20px'}}><Button height="xs" padding="s">삭제</Button><Button st="primary" height="xs" padding="s">수정</Button></div>
-								</li>
-                <li>
-                  <span>닉네임 닉네임</span>
-                  <p>코멘트 입니다 코멘트 입니다 코멘트 입니다. 코멘트 입니다 코멘트 입니다 코멘트 입니다. 코멘트 입니다 코멘트 입니다 코멘트 입니다. 코멘트 입니다 코멘트 입니다 코멘트 입니다. 코멘트 입니다 코멘트 입니다 코멘트 입니다.</p>
-									<div style={{marginTop: '20px'}}><Button height="xs" padding="s">삭제</Button><Button st="primary" height="xs" padding="s">수정</Button></div>
-								</li>
-              </ul>
-            </div>
+						{commentData.map((v, i) => {
+								return(
+						<div className="comment_view" key={i}>	
+						<ul>
+						<li>
+						<span>{v.id}</span>
+						<p>{v.comment}</p>
+					</li>
+				</ul>
+            </div>	
+				)
+			})}
 					</CommentArea>
           <div className="btn_area">
           <Button width="m">취소</Button>
-          <Button width="m" st="primary">등록하기</Button>
+          <Button width="m" st="primary" >
+		  등록하기
+		 </Button>
           </div>
 				</div>
 			</section>
