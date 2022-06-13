@@ -3,8 +3,73 @@ import styled from "styled-components";
 
 import Button from "./Button";
 
+<<<<<<< HEAD
+
+const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
+	const dispatch = useDispatch();
+	const location = useLocation();
+	const [pathname, setPathname] = useState(type);
+	const userInfoState = useSelector(state=>state.user.user);
+	const [username, setUsername] = useState("");
+	const [pw, setPw] = useState("");
+	const [pwcheck, setPwcheck] = useState('')
+	const [nickname, setNickname] = useState('')
+	const [clicked, setClicked] = useState(false);
+
+	
+	const signUp = () => {
+		setClicked(true);
+		const inputs = [username, nickname, pw, pwcheck];
+		for(let i=0; i<inputs.length; i++){
+			if(inputs[i].trim().length <= 0){
+				return false;
+			}
+			if(pw.trim() !== pwcheck.trim()){
+				return false;
+			}
+			if( i >= inputs.length - 1 ){
+				const data = {
+					username: username,
+					nickname: nickname,
+					pw: pw,
+					pwcheck: pwcheck,
+				};
+				dispatch(signUpAxios(data));
+				setClicked(false);
+			}
+		}
+	};
+	const signIn = () => {
+		setClicked(true);
+		const inputs = [username, pw];
+		for(let i=0; i<inputs.length; i++){
+			if(inputs[i].trim().length <= 0){
+				return false;
+			}
+			if( i >= inputs.length - 1 ){
+				const data = {
+					username: username,
+					pw: pw,
+				};
+				dispatch(signInAxios(data));
+				setClicked(false);
+			}
+		}
+	};
+	useEffect(()=>{
+		if(userInfoState.length > 0){
+			console.log('got user info')
+			setLoggedIn(true);
+			setUserInfo(...userInfoState);
+		}
+	}, [userInfoState]);
+
+	
+	if(loggedIn) return (<Navigate to="/" replace />)
+=======
 const Signup = ({type}) => {
   console.log(type)
+>>>>>>> parent of fb51ee7 (Feat: signup 추가)
 	return (
 		<div className="content">
 			<section>
