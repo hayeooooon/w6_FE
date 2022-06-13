@@ -1,8 +1,7 @@
+import React from "react";
 import "./App.css";
-import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import { Routes, Route } from "react-router-dom";
-import axios from 'axios';
 
 // components
 import Header from "./components/Header";
@@ -23,32 +22,19 @@ function App() {
 	 * 마이페이지: Mypage.js
 	 * 로그인/회원가입 Signup.js
 	 */
-
-	const [isLoading, setIsLoading] = useState(true);
-	const [isError, setIsErro] = useState(false);
-
-	const [loggedIn, setLoggedIn] = useState(false);
-	const [userInfo, setUserInfo] = useState({});
-	
-
-	
-
-	
-
-	
 	return (
-		<Wrap className={`App ${isLoading ? 'is_loading' : ''}`}>
-			<Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} userInfo={userInfo} setUserInfo={setUserInfo}></Header>
+		<Wrap className="App">
+			<Header></Header>
 			<Container className="container">
 				<Routes>
-					<Route path="/" element={<Main/>}></Route>
+					<Route path="/" element={<Main />}></Route>
 					<Route path="/write" element={<Write />}></Route> {/* 게시글 등록 */}
 					<Route path="/edit/:postId" element={<Write />}></Route>
 					{/* 게시글 수정 */}
 					<Route path="/detail/:postId" element={<Detail />}></Route>
 					<Route path="/mypage" element={<Mypage />}></Route>
-					<Route path="/signup" element={<Signup type="signup" loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUserInfo={setUserInfo} />}></Route> {/* 회원가입 */}
-					<Route path="/signin" element={<Signup type="signin" loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUserInfo={setUserInfo} />}></Route> {/* 로그인 */}
+					<Route path="/signup" element={<Signup type="signup" />}></Route> {/* 회원가입 */}
+					<Route path="/signin" element={<Signup type="signin" />}></Route> {/* 로그인 */}
 				</Routes>
 			</Container>
 			<Footer></Footer>

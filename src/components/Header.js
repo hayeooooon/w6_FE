@@ -1,39 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { Link, useNavigate} from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { Link } from "react-router-dom";
 
 import Button from "../components/Button";
-import {signOutAxios} from '../modules/redux/user';
 
-const Header = ({ loggedIn, setLoggedIn, userInfo, setUserInfo}) => {
-	const navigate = useNavigate();
-	const dispatch = useDispatch();
+const Header = () => {
 	const logout = () => {
 		// 로그아웃 이벤트
-		setLoggedIn(false);
-		setUserInfo({});
-		dispatch(signOutAxios());
 	};
-	const header_btns = loggedIn ? (
-		<>
-			<Link className="link" to="/mypage">
-			<span className="fw_400">Happy Runner </span>{userInfo.username}
-			</Link>
-			<Button st="text" onClick={logout}>
-				로그아웃
-			</Button>
-		</>
-	) : (
-		<>
-			<Link className="link" to="/signin">
-				로그인
-			</Link>
-			<Link className="link" to="/signup">
-				회원가입
-			</Link>
-		</>
-	);
 	return (
 		<HeaderWrap>
 			<Inner className="set_inner">
@@ -41,7 +15,18 @@ const Header = ({ loggedIn, setLoggedIn, userInfo, setUserInfo}) => {
 					<Link to="/">해달</Link>
 				</Logo>
 				<ButtonArea>
-					{header_btns}
+					<Link className="link" to="/signin">
+						로그인
+					</Link>
+					<Link className="link" to="/signup">
+						회원가입
+					</Link>
+					<Link className="link" to="/mypage">
+						User
+					</Link>
+					<Button st="text" onClick={logout}>
+						로그아웃
+					</Button>
 				</ButtonArea>
 			</Inner>
 		</HeaderWrap>
@@ -56,7 +41,7 @@ const HeaderWrap = styled.header`
 	height: 60px;
 	line-height: 60px;
 	box-sizing: border-box;
-	z-index: 2;
+  z-index: 2;
 	background-color: #fff;
 `;
 const Inner = styled.div`
