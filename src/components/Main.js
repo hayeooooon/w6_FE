@@ -7,7 +7,8 @@ import img_2 from "../images/img_2.jpeg";
 import img_3 from "../images/img_3.jpeg";
 import img_4 from "../images/img_4.jpeg";
 
-const Main = () => {
+const Main = ({username}) => {
+	// console.log('aa')
 	return (
 		<div className="content">
 			<TopArea>
