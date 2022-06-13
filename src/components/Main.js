@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link, useNavigate, useParams} from "react-router-dom";
-import{useSelector, useDispatch, } from "react-redux";
-
+import { Link, useNavigate } from "react-router-dom";
 
 import img_1 from "../images/img_1.jpeg";
 import img_2 from "../images/img_2.jpeg";
 import img_3 from "../images/img_3.jpeg";
 import img_4 from "../images/img_4.jpeg";
 
-const Main = () => {
+const Main = ({username}) => {
+	// console.log('aa')
 	return (
 		<div className="content">
 			<TopArea>
@@ -178,57 +177,125 @@ const RankItemGroup = styled.ul`
 const PostsArea = () => {
 	const [postId] = useState(0); // 임시 data
 	const navigate = useNavigate();
-	const index = useParams();
-	
-	// //todo: PostItem map돌리려구 하는 중
-	const datas = useSelector((state) => state.haedal.list)
-	//console.log(datas)
-	const scoreEmoji = ['😡','☹️','☺️','😆','😍']
-	const scoreCharacter = ['최악','나쁨','보통','좋음','최상']
-
-
-
 	return (
 		<>
 			<PostsWrap>
 				<div className="set_inner">
 					<SectionTitle>행복 러너들의 이야기</SectionTitle>
-						 <PostsGroup>
-						 {datas.map((v,i) => {
-									 return(	
-							 <PostItem key={i}>
-							<Link to={`/detail/${v.id}`} className="inner">
-
+					<PostsGroup>
+						<PostItem>
+							<Link to={`/detail/${postId}`} className="inner">
 								<span
 									className="img_box"
 									style={{ backgroundImage: `url(${img_1})` }}
-						 ></span>
+								></span>
 								<div>
 									<div className="score_area">
 										<span>
-											행복지수 <strong>{scoreCharacter[v.happypoint-1]}</strong>
+											행복지수 <strong>최상</strong>
 										</span>
 										<br />
-										<strong>{scoreEmoji[v.happypoint-1]}</strong>
+										<strong>😍</strong>
 									</div>
 									<div className="text_area">
 										<span>
 											Happy Runner <strong>Nickname</strong>
 										</span>
 										<p>
-											{v.content}
+											오늘 하늘이 너무 예뻤어요! 너무 피곤했는데 산책갔다가
+											하늘이 너무 예뻐서 힐링하고 왔습니다.
 										</p>
 									</div>
 								</div>
 								<em>VIEW MORE</em>
 							</Link>
-							 </PostItem>
-							  
-						 );
-						})}
-						</PostsGroup>
-						</div>
-					</PostsWrap>
+						</PostItem>
+						<PostItem>
+							<Link to={`/detail/${postId}`} className="inner">
+								<span
+									className="img_box"
+									style={{ backgroundImage: `url(${img_2})` }}
+								></span>
+								<div>
+									<div className="score_area">
+										<span>
+											행복지수 <strong>보통</strong>
+										</span>
+										<br />
+										<strong>☺️</strong>
+									</div>
+									<div className="text_area">
+										<span>
+											Happy Runner <strong>Nickname</strong>
+										</span>
+										<p>
+											오늘 하늘이 너무 예뻤어요! 너무 피곤했는데 산책갔다가
+											하늘이 너무 예뻐서 힐링하고 왔습니다.
+										</p>
+									</div>
+								</div>
+								<em>VIEW MORE</em>
+							</Link>
+						</PostItem>
+						<PostItem>
+							<Link to={`/detail/${postId}`} className="inner">
+								<span
+									className="img_box"
+									style={{ backgroundImage: `url(${img_3})` }}
+								></span>
+
+								<div>
+									<div className="score_area">
+										<span>
+											행복지수 <strong>나쁨</strong>
+										</span>
+										<br />
+										<strong>☹️</strong>
+									</div>
+									<div className="text_area">
+										<span>
+											Happy Runner <strong>Nickname</strong>
+										</span>
+										<p>
+											오늘 하늘이 너무 예뻤어요! 너무 피곤했는데 산책갔다가
+											하늘이 너무 예뻐서 힐링하고 왔습니다.
+										</p>
+									</div>
+								</div>
+								<em>VIEW MORE</em>
+							</Link>
+						</PostItem>
+						<PostItem>
+							<Link to={`/detail/${postId}`} className="inner">
+								<span
+									className="img_box"
+									style={{ backgroundImage: `url(${img_4})` }}
+								></span>
+
+								<div>
+									<div className="score_area">
+										<span>
+											행복지수 <strong>좋음</strong>
+										</span>
+										<br />
+										<strong>😆</strong>
+									</div>
+									<div className="text_area">
+										<span>
+											Happy Runner <strong>Nickname</strong>
+										</span>
+										<p>
+											오늘 하늘이 너무 예뻤어요! 너무 피곤했는데 산책갔다가
+											하늘이 너무 예뻐서 힐링하고 왔습니다.
+										</p>
+									</div>
+								</div>
+								<em>VIEW MORE</em>
+							</Link>
+						</PostItem>
+					</PostsGroup>
+				</div>
+			</PostsWrap>
 			<RegisterButton onClick={() => navigate("/write")}>
 				<span>새글 작성하기</span>
 			</RegisterButton>

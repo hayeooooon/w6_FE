@@ -1,60 +1,9 @@
-import React, {useState, useRef, useEffect} from "react";
+import React from "react";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-import {createHappy} from "../redux/modules/haedal";
-import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
 
 import Button from "./Button";
 
-
 const Write = () => {
-
-	const inputTxt = React.useRef(null);
-	const inputImg = React.useRef(null)
-	const dispatch = useDispatch(null);
-	const formData = new FormData()
-	const data = useSelector(state => state.haedal.list)
-	useEffect(()=>{
-	},[data])
-	console.log(data)
-	//todo: 이미지 업로드
-	const uploadImg = async (e) => {
-	e.preventDefault();
-	
-	if(e.target.files){
-		const uploadFile = e.target.files[0]
-		const fomeData = new FormData()
-		formData.append('files',uploadFile)
-	await axios({
-	method: 'post',
-      url: '/api/images',
-      data: formData,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-	}
-}
-
-//todo: 행복지수 찍기
-	const [score, setScore]=useState()
-	
-
-//todo: 게시글내용입력
-const createBox = () => {
-	//console.log(inputTxt.current.value)
-	dispatch(createHappy(
-	{
-		happypoint: score,
-		content : inputTxt.current.value,
-		img: '',
-		nickname: ''
-	}	
-	));
-};
-
-
 	return (
 		<div className="content">
 			<section>
@@ -65,50 +14,38 @@ const createBox = () => {
 							<InputLabel>HAPPINESS SCORE</InputLabel>
 							<InputBox className="input_box">
 								<label>
-									<input type="radio" name="score" onChange={(e)=>{
-										setScore(1)
-									}} />
+									<input type="radio" name="score" />
 									<span>최악</span>
 								</label>
 								<label>
-									<input type="radio" name="score" onChange={(e)=>{
-										setScore(2)
-									}}/> 
+									<input type="radio" name="score" />
 									<span>나쁨</span>
 								</label>
 								<label>
-									<input type="radio" name="score" onChange={(e)=>{
-										setScore(3)
-									}}/>
+									<input type="radio" name="score" />
 									<span>보통</span>
 								</label>
 								<label>
-									<input type="radio" name="score" onChange={(e)=>{
-										setScore(4)
-									}} />
+									<input type="radio" name="score" />
 									<span>좋음</span>
 								</label>
 								<label>
-									<input type="radio" name="score" onChange={(e)=>{
-										setScore(5)
-									}} />
+									<input type="radio" name="score" />
 									<span>최상</span>
 								</label>
 							</InputBox>
 						</InputArea>
 						<InputArea className="input_area">
 							<InputLabel>PHOTO</InputLabel>
-							<form>
 							<InputBox>
 								<label>
-									<input type="file" onChange ={uploadImg} ref={inputImg} />
+									<input type="file" />
 									<Attachment>
 										<p>파일명.jpg</p>
 										<Button st="primary">이미지 업로드</Button>
 									</Attachment>
 								</label>
 							</InputBox>
-							</form>
 						</InputArea>
 						<InputArea className="input_area textarea">
 							<InputLabel>STORY</InputLabel>
@@ -117,18 +54,14 @@ const createBox = () => {
 									<textarea
 										type="text"
 										placeholder="오늘의 행복한 이야기를 작성해주세요."
-										ref={inputTxt}
 									></textarea>
 								</div>
 							</InputBox>
 						</InputArea>
 					</Form>
 					<div className="btn_area">
-          <Button width="m">
-		  <Link to ="/" style={{textDecoration: "none", color: "inherit"}}>취소</Link></Button>
-          <Button width="m" st="primary" onClick={createBox}  >
-		 
-                    등록하기</Button> {/*  수정모드일 경우 수정하기로 텍스트 변경 */}
+          <Button width="m">취소</Button>
+          <Button width="m" st="primary">등록하기</Button> {/*  수정모드일 경우 수정하기로 텍스트 변경 */}
           </div>
 				</div>
 			</section>
