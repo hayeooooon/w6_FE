@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { createHappy, loadPostAxios, updateHappyAxios } from "../modules/redux/haedal";
+import { createHappy, loadPostAxios, updateHappyAxios, createPost } from "../modules/redux/haedal";
 import { useNavigate, Link, Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 
@@ -12,7 +12,6 @@ const Write = ({page}) => {
 	const dispatch = useDispatch(null);
 	const param = useParams();
 	const post_data = useSelector(state=>state.haedal.post);
-	const formData = new FormData();
 	const [filename, setFilename] = useState();
 	//todo: 행복지수 찍기
 	const scoreInput = useRef();
@@ -24,6 +23,7 @@ const Write = ({page}) => {
 	const [clicked, setClicked] = useState();
 	const inputs = [score, filename, clicked];
 	const refs = [scoreInput, fileInput, contentInput];
+ const [formdata, setFormdata] = useState();
 
 	//todo: 이미지 업로드
 	const uploadImg = async (e) => {
@@ -31,23 +31,31 @@ const Write = ({page}) => {
 		if (e.target.files) {
 			const uploadFile = e.target.files[0];
 			const formData = new FormData();
-			formData.append("files", uploadFile);
-			await axios({
-				method: "post",
-				url: "/api/images",
-				data: formData,
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-			}).then(
-				res => {
-					setFilename(e.target.files[0].name); // 데이터 연결 후 res로 변경
-				}
-			).catch(
-				err => {
-					console.error(err);
-				}
-			);
+			formData.append("happypoint", 1);
+			formData.append("img", uploadFile);
+			formData.append("content", 'content');
+			setFormdata(formData);
+			console.log(formData, score, uploadFile, content)
+			setFilename(e.target.files[0].name)
+
+
+			// await axios({
+			// 	method: "post",
+			// 	url: "/api/images",
+			// 	data: formData,
+			// 	headers: {
+			// 		"Content-Type": "multipart/form-data",
+			// 	},
+			// }).then(
+			// 	res => {
+			// 		console.log(res)
+			// 		setFilename(e.target.files[0].name); // 데이터 연결 후 res로 변경
+			// 	}
+			// ).catch(
+			// 	err => {
+			// 		console.error(err);
+			// 	}
+			// );
 		}
 	};
 
@@ -60,13 +68,8 @@ const Write = ({page}) => {
 				break;
 			}
 			if(i === inputs.length-1){
-				const data = {
-					happypoint: score,
-					img: filename,
-					content: content,
-				}
 				if(page === 'edit') dispatch(updateHappyAxios(param.postId));
-				else dispatch(createHappy(data));
+				else dispatch(createPost(formdata));
 				setClicked(false);
 				break;
 			}
