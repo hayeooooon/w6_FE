@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-	baseURL: 'http://localhost:5001',
+	baseURL: 'http://3.35.230.132/',
 	headers: {
 		'content-type': 'application/json;charset=UTF-8',
 		accept: 'application/json,',
@@ -20,6 +20,13 @@ export const apis = {
 
 	// post
 	postList: () => api.get('/postList'),
+	postdetail: (postId) => api.get(`/api/postdetail/${postId}`),
+	rankingList: () => api.get('/ranking'),
+	updatePost: (postId) => api.put(`/api/post/${postId}`),
+	
+
+	// file
+	
 
 
 	

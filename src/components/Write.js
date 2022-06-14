@@ -1,114 +1,134 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import {createHappy} from "../modules/redux/haedal";
-import { useNavigate, Link } from "react-router-dom";
+import { createHappy, loadPostAxios, updateHappyAxios } from "../modules/redux/haedal";
+import { useNavigate, Link, Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 import Button from "./Button";
 
-
-const Write = () => {
-
-	const inputTxt = React.useRef(null);
-	const inputImg = React.useRef(null)
+const Write = ({page}) => {
+	const navigate = useNavigate();
 	const dispatch = useDispatch(null);
-	const formData = new FormData()
-	const data = useSelector(state => state.haedal.list)
-	useEffect(()=>{
-	},[data])
-	console.log(data)
+	const param = useParams();
+	const post_data = useSelector(state=>state.haedal.post);
+	const formData = new FormData();
+	const [filename, setFilename] = useState();
+	//todo: 행복지수 찍기
+	const scoreInput = useRef();
+	const fileInput = useRef();
+	const contentInput = useRef();
+	const scores = ['최악', '나쁨', '보통', '좋음', '최상'];
+	const [score, setScore] = useState();
+	const [content, setContent] = useState();
+	const [clicked, setClicked] = useState();
+	const inputs = [score, filename, clicked];
+	const refs = [scoreInput, fileInput, contentInput];
+
 	//todo: 이미지 업로드
 	const uploadImg = async (e) => {
-	e.preventDefault();
-	
-	if(e.target.files){
-		const uploadFile = e.target.files[0]
-		const fomeData = new FormData()
-		formData.append('files',uploadFile)
-	await axios({
-	method: 'post',
-      url: '/api/images',
-      data: formData,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-	}
-}
+		e.preventDefault();
+		if (e.target.files) {
+			const uploadFile = e.target.files[0];
+			const formData = new FormData();
+			formData.append("files", uploadFile);
+			await axios({
+				method: "post",
+				url: "/api/images",
+				data: formData,
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			}).then(
+				res => {
+					setFilename(e.target.files[0].name); // 데이터 연결 후 res로 변경
+				}
+			).catch(
+				err => {
+					console.error(err);
+				}
+			);
+		}
+	};
 
-//todo: 행복지수 찍기
-	const [score, setScore]=useState()
-	
+	//todo: 게시글내용입력
+	const checkValidation = () => {
+		setClicked(true);
+		for(let i=0; i<inputs.length; i++){
+			if(inputs[i] === '' || inputs[i] === undefined){
+				refs[i].current.focus();
+				break;
+			}
+			if(i === inputs.length-1){
+				const data = {
+					happypoint: score,
+					img: filename,
+					content: content,
+				}
+				if(page === 'edit') dispatch(updateHappyAxios(param.postId));
+				else dispatch(createHappy(data));
+				setClicked(false);
+				break;
+			}
+		}
+	};
 
-//todo: 게시글내용입력
-const createBox = () => {
-	//console.log(inputTxt.current.value)
-	dispatch(createHappy(
-	{
-		happypoint: score,
-		content : inputTxt.current.value,
-		img: '',
-		nickname: ''
-	}	
-	));
-};
-
+	useEffect(()=>{
+		if(page === 'edit'){
+			dispatch(loadPostAxios(param.postId));
+		}
+	},[])
+	useEffect(()=>{
+		if(page === 'edit' && post_data.length > 0){
+			const post = post_data[0];
+			setScore(post.happypoint);
+			setContent(post.content);
+			setFilename(post.img);
+		}
+	},[post_data])
 
 	return (
 		<div className="content">
 			<section>
 				<div className="set_inner">
-					<SectionTitle>오늘의 행복 이야기를 들려주세요!</SectionTitle>
+					<SectionTitle>오늘의 이야기를 들려주세요!</SectionTitle>
 					<Form onSubmit={(e) => e.preventDefault()}>
 						<InputArea className="input_area radio score">
 							<InputLabel>HAPPINESS SCORE</InputLabel>
 							<InputBox className="input_box">
-								<label>
-									<input type="radio" name="score" onChange={(e)=>{
-										setScore(1)
-									}} />
-									<span>최악</span>
-								</label>
-								<label>
-									<input type="radio" name="score" onChange={(e)=>{
-										setScore(2)
-									}}/> 
-									<span>나쁨</span>
-								</label>
-								<label>
-									<input type="radio" name="score" onChange={(e)=>{
-										setScore(3)
-									}}/>
-									<span>보통</span>
-								</label>
-								<label>
-									<input type="radio" name="score" onChange={(e)=>{
-										setScore(4)
-									}} />
-									<span>좋음</span>
-								</label>
-								<label>
-									<input type="radio" name="score" onChange={(e)=>{
-										setScore(5)
-									}} />
-									<span>최상</span>
-								</label>
+								{
+									scores.map((v,i)=>{
+										return (
+											<label key={i}>
+												<input
+													type="radio"
+													name="score"
+													ref={ i === 0 ? scoreInput : null}
+													checked={score === i+1 ? true : false}
+													onChange={() => {
+														setScore(i+1);
+													}}
+												/>
+												<span>{v}</span>
+											</label>
+										)
+									})
+								}
 							</InputBox>
+							{ (clicked && (score === '' || score === undefined)) && <p className="txt_err">오늘의 컨디션을 선택해주세요!</p> }
 						</InputArea>
-						<InputArea className="input_area">
+						<InputArea className="input_area file">
 							<InputLabel>PHOTO</InputLabel>
-							<form>
 							<InputBox>
 								<label>
-									<input type="file" onChange ={uploadImg} ref={inputImg} />
+									<input type="file" onChange={uploadImg} ref={fileInput}/>
 									<Attachment>
-										<p>파일명.jpg</p>
+										<p>{filename}</p>
 										<Button st="primary">이미지 업로드</Button>
 									</Attachment>
 								</label>
 							</InputBox>
-							</form>
+							{ (clicked && (filename === '' || filename === undefined)) && <p className="txt_err">오늘의 사진을 첨부해주세요!</p> }
 						</InputArea>
 						<InputArea className="input_area textarea">
 							<InputLabel>STORY</InputLabel>
@@ -116,28 +136,31 @@ const createBox = () => {
 								<div>
 									<textarea
 										type="text"
-										placeholder="오늘의 행복한 이야기를 작성해주세요."
-										ref={inputTxt}
+										placeholder="오늘의 이야기를 작성해주세요."
+										ref={contentInput}
+										value={content ? content : ''}
+										onChange={(e)=>setContent(e.target.value)}
 									></textarea>
 								</div>
+								{ (clicked && (content === '' || content === undefined)) && <p className="txt_err">오늘의 이야기를 작성해주세요!</p> }
 							</InputBox>
 						</InputArea>
 					</Form>
 					<div className="btn_area">
-          <Button width="m">
-		  <Link to ="/" style={{textDecoration: "none", color: "inherit"}}>취소</Link></Button>
-          <Button width="m" st="primary" onClick={createBox}  >
-		 
-                    등록하기</Button> {/*  수정모드일 경우 수정하기로 텍스트 변경 */}
-          </div>
+						{
+							page === 'edit'
+							? <><Button width="m" onClick={()=>navigate(-1)}>취소</Button><Button width="m" st="primary" onClick={checkValidation}>수정하기</Button></>
+							: <><Button width="m" onClick={()=>navigate('/')}>취소</Button><Button width="m" st="primary" onClick={checkValidation}>등록하기</Button></>
+						}
+						{/*  수정모드일 경우 수정하기로 텍스트 변경 */}
+					</div>
 				</div>
 			</section>
 		</div>
 	);
 };
 
-const Form = styled.form`
-`;
+const Form = styled.form``;
 const SectionTitle = styled.h3`
 	font-size: 2.4rem;
 	padding-bottom: 20px;
@@ -145,34 +168,39 @@ const SectionTitle = styled.h3`
 	border-bottom: 1px solid #000;
 `;
 const InputArea = styled.div`
-margin-top: 80px;
-&.radio.score{
-	.input_box{
-		display: flex;
-		gap: 25px;
-		label{
-		display: inline-block;
-		cursor: pointer;
-		input:checked{
-			& + span{
-				background: #000;
-				color: #f0f0f0;
+	margin-top: 80px;
+	&.radio.score {
+		.input_box {
+			display: flex;
+			gap: 25px;
+			label {
+				position: relative;
+				display: inline-block;
+				cursor: pointer;
+				input:checked {
+					& + span {
+						background: #000;
+						color: #f0f0f0;
+					}
+				}
+				span {
+					display: inline-block;
+					padding: 0 25px;
+					line-height: 42px;
+					height: 44px;
+					border-radius: 22px;
+					border: 1px solid #000;
+					font-weight: 500;
+				}
 			}
 		}
-		span{
-			display: inline-block;
-			padding: 0 25px;
-			line-height: 42px;
-			height: 44px;
-			border-radius: 22px;
-			border: 1px solid #000;
-			font-weight: 500;
+	}
+	&.file{
+		label{
+			position: relative;
 		}
 	}
-	}
-	
-}
-&.textarea {
+	&.textarea {
 		.input_box {
 			div {
 				padding: 12px 0;
@@ -194,7 +222,8 @@ margin-top: 80px;
 				background-color: #f0f0f0;
 			}
 		}
-	}`;
+	}
+`;
 const InputLabel = styled.p`
 	position: relative;
 	display: inline-block;
@@ -204,13 +233,13 @@ const InputLabel = styled.p`
 	color: #000;
 	margin-bottom: 20px;
 	margin-left: 4px;
-	&:before{
+	&:before {
 		position: absolute;
 		left: -4px;
 		right: -4px;
 		bottom: 0;
-		height: .5em;
-		content: '';
+		height: 0.5em;
+		content: "";
 		background-color: #f2b43f;
 		z-index: -1;
 	}
