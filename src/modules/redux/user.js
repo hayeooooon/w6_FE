@@ -5,10 +5,12 @@ import { apis } from '../../api/index';
 const SIGNIN = 'user/SIGNIN';
 const SIGNOUT = 'user/SIGNOUT';
 const SIGNUP = 'user/SIGNUP';
+const MYPAGE = 'user/MYPAGE';
 
 // initial state 
 const initialState = {
   user: [],
+  mypage: [],
 }
 
 // action creator
@@ -21,7 +23,9 @@ export const signOut = () => {
 export const signUp = (user_info) => {
   return {type: SIGNUP, signUp}
 }
-
+export const loadMypage = (mypage_data) => {
+  return {type: MYPAGE, mypage_data}
+}
 
 // middlewares
 export const signInAxios = (user_info) => {
@@ -44,19 +48,28 @@ export const signUpAxios = (user_info) => {
     history.push('/', {replace: true});
   }
 }
+export const loadMypageAxios = () => {
+  return async (dispatch) => {
+    const mypageData = await apis.mypage();
+    dispatch(loadMypage(mypageData.data[0]))
+  }
+}
 
 // reducer
 export default function reducer(state = initialState, action = {}) {
   switch(action.type){
     case 'user/SIGNIN': {
       const user_info = {...action.user_info};
-      return {user: [user_info]};
+      return {user: [user_info], mypage: []};
     }
     case 'user/SIGNOUT': {
-      return {user: []};
+      return {user: [], mypage: []};
     }
     case 'user/SIGNUP': {
       return state;
+    }
+    case 'user/MYPAGE': {
+      return {user: state.user, mypage: [action.mypage_data]};
     }
     default: {
       return state;

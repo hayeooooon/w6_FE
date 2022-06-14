@@ -14,6 +14,7 @@ export const apis = {
 	signIn: (data) => api.post('/user', data),
 	userInfo: () => api.post('/user/auth'),
 	signOut: () => api.post('/user/logout'),
+	mypage: () => api.get('mypage'),
 
 	
 
