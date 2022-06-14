@@ -3,12 +3,13 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import stroe from "./modules/configStore";
-import { createBrowserHistory } from "history";
+import { createBrowserHistory } from 'history';
+import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
 
-const customHistory = createBrowserHistory();
+let customHistory = createBrowserHistory();
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
 	<HistoryRouter history={customHistory}>

@@ -1,16 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { signInAxios, signUpAxios } from "../modules/redux/user";
 
 import Button from "./Button";
+import { apis } from "../api";
 
 
 const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 	const dispatch = useDispatch();
-	const location = useLocation();
-	const [pathname, setPathname] = useState(type);
+	const navigate = useNavigate();
 	const userInfoState = useSelector(state=>state.user.user);
 	const [username, setUsername] = useState("");
 	const [pw, setPw] = useState("");
@@ -19,7 +19,7 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 	const [clicked, setClicked] = useState(false);
 
 	
-	const signUp = () => {
+	const signUp = async () => {
 		setClicked(true);
 		const inputs = [username, nickname, pw, pwcheck];
 		for(let i=0; i<inputs.length; i++){
@@ -36,8 +36,23 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 					pw: pw,
 					pwcheck: pwcheck,
 				};
-				dispatch(signUpAxios(data));
+				// dispatch(signUpAxios(data));
+				await apis.signUp(data).then(
+					res => {
+						console.log(res.data);
+						setUsername('');
+						setNickname('');
+						setPw('');
+						setPwcheck('');
+						navigate('/signin');
+					}
+				).catch(
+					err => {
+						console.error(err);
+					}
+				)
 				setClicked(false);
+				break;
 			}
 		}
 	};
@@ -84,6 +99,7 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 								<input
 									type="text"
 									placeholder="아이디를 입력해주세요."
+									value={username ? username : ''}
 									onChange={(e) => setUsername(e.target.value)}
 								/>
 								{ (clicked && username.trim().length <= 0) && <p className="txt_err">아이디를 입력해주세요.</p>}
@@ -96,6 +112,7 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 									<input
 										type="text"
 										placeholder="닉네임을 입력해주세요."
+										value={nickname ? nickname : ''}
 										onChange={(e) => (setNickname(e.target.value))}
 									/>
 									{ (clicked && nickname.trim().length <= 0) && <p className="txt_err">닉네임을 입력해주세요.</p>}
@@ -109,6 +126,7 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 								<input
 									type="text"
 									placeholder="비밀번호를 입력해주세요."
+									value={pw ? pw : ''}
 									onChange={(e) => setPw(e.target.value)}
 								/>
 								{ (clicked && pw.trim().length <= 0) && <p className="txt_err">비밀번호를 입력해주세요.</p>}
@@ -117,6 +135,7 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 									<input
 										type="text"
 										placeholder="비밀번호 확인"
+										value={pwcheck ? pwcheck : ''}
 										onChange={(e) => (setPwcheck(e.target.value))}
 									/>
 									{ (clicked && pwcheck.trim().length <= 0) && <p className="txt_err">비밀번호를 입력해주세요.</p>}
@@ -126,7 +145,7 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 							</InputBox>
 						</InputArea>
 						<div className="btn_area">
-							<Button width="m">취소</Button>
+							<Button width="m" onClick={()=>{navigate('/')}}>취소</Button>
 							{type === "signup" ? (
 								<Button width="m" st="primary" onClick={signUp}>
 									가입하기

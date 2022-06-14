@@ -64,7 +64,7 @@ export const signUpAxios = (user_info) => {
     apis.signUp(user_info).then(
       async res => {
         // await dispatch(signUp(user_info)); 회원 목록 저장할 필요가 없는 듯..?
-        history.push('/', {replace: true});
+        history.push('/');
       }
     ).catch(
       err => {

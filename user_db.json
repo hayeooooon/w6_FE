@@ -1,4 +1,29 @@
 {
+  "postdetail": [
+    {
+      "nickname": "작성자 nickname",
+      "happypoint": 3,
+      "img": "https://a.cdn-hotels.com/gdcs/production19/d1764/0fdc6746-e0a8-4abc-929e-e4a3e237b95b.jpg",
+      "content": "오늘도 날씨가 아침엔 엄청 맑더니 갑자기 흐려지고 바람도 많이불고 날씨가 대체 왜이래 오늘도 날씨가 아침엔 엄청 맑더니 갑자기 흐려지고 바람도 많이불고 날씨가 대체 왜이래 오늘도 날씨가 아침엔 엄청 맑더니 갑자기 흐려지고 바람도 많이불고 날씨가 대체 왜이래 오늘도 날씨가 아침엔 엄청 맑더니 갑자기 흐려지고 바람도 많이불고 날씨가 대체 왜이래 오늘도 날씨가 아침엔 엄청 맑더니 갑자기 흐려지고 바람도 많이불고 날씨가 대체 왜이래 오늘도 날씨가 아침엔 엄청 맑더니 갑자기 흐려지고 바람도 많이불고 날씨가 대체 왜이래 ",
+      "modifiedAt": "2022-06-02",
+      "createdAt": "2022-06-01",
+      "userId": "글쓴사람 ID",
+      "comments": [
+        {
+          "commentId": 1,
+          "comment": "코멘트 내용 코멘트 내용",
+          "nickname": "코멘트 쓴사람 닉네임",
+          "userId": 1
+        },
+        {
+          "commentId": 2,
+          "comment": "코멘트 내용 코멘트 내용 222 코멘트 내용 코멘트 내용 222 코멘트 내용 코멘트 내용 222 코멘트 내용 코멘트 내용 222 코멘트 내용 코멘트 내용 222 코멘트 내용 코멘트 내용 222 코멘트 내용 코멘트 내용 222 코멘트 내용 코멘트 내용 222 코멘트 내용 코멘트 내용 222 코멘트 내용 코멘트 내용 222",
+          "nickname": "닉네임222",
+          "userId": 2
+        }
+      ]
+    }
+  ],
   "postList": [
     {
       "postId": 1,
@@ -35,6 +60,15 @@
     },
     {
       "nickname": "ranking_222"
+    },
+    {
+      "nickname": "3rd"
+    },
+    {
+      "nickname": "네번째 랭킹"
+    },
+    {
+      "nickname": "다섯번째~~~"
     }
   ],
   "mypage": [
@@ -99,6 +133,76 @@
       "pw": "b",
       "pwcheck": "b",
       "id": 3
+    },
+    {
+      "username": "ㅁ",
+      "nickname": "ㅁ",
+      "pw": "ㅁ",
+      "pwcheck": "ㅁ",
+      "id": 4
+    },
+    {
+      "username": "ㅁ",
+      "nickname": "ㅁ",
+      "pw": "ㅁ",
+      "pwcheck": "ㅁ",
+      "id": 5
+    },
+    {
+      "username": "a",
+      "nickname": "a",
+      "pw": "a",
+      "pwcheck": "a",
+      "id": 6
+    },
+    {
+      "username": "a",
+      "nickname": "a",
+      "pw": "a",
+      "pwcheck": "a",
+      "id": 7
+    },
+    {
+      "username": "ㅁ",
+      "nickname": "ㅁ",
+      "pw": "ㅁ",
+      "pwcheck": "ㅁ",
+      "id": 8
+    },
+    {
+      "username": "a",
+      "nickname": "a",
+      "pw": "a",
+      "pwcheck": "a",
+      "id": 9
+    },
+    {
+      "username": "a",
+      "nickname": "a",
+      "pw": "a",
+      "pwcheck": "a",
+      "id": 10
+    },
+    {
+      "username": "a",
+      "nickname": "a",
+      "pw": "bb",
+      "pwcheck": "bb",
+      "id": 11
+    },
+    {
+      "username": "a",
+      "nickname": "aa",
+      "pw": "b",
+      "pwcheck": "b",
+      "id": 12
+    },
+    {
+      "username": "a",
+      "nickname": "b",
+      "pw": "b",
+      "pwcheck": "b",
+      "id": 13
     }
   ],
   "user": [
@@ -141,6 +245,36 @@
       "username": "a",
       "pw": "a",
       "id": 8
+    },
+    {
+      "username": "ㅁ",
+      "pw": "ㅁ",
+      "id": 9
+    },
+    {
+      "username": "a",
+      "pw": "a",
+      "id": 10
+    },
+    {
+      "username": "a",
+      "pw": "a",
+      "id": 11
+    },
+    {
+      "username": "a",
+      "pw": "a",
+      "id": 12
+    },
+    {
+      "username": "a",
+      "pw": "a",
+      "id": 13
+    },
+    {
+      "username": "ㅁ",
+      "pw": "ㅁ",
+      "id": 14
     }
   ]
 }

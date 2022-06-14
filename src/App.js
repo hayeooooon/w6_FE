@@ -1,7 +1,7 @@
 import "./App.css";
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import { Routes, Route } from "react-router-dom";
+import { Router, Routes, Route } from "react-router-dom";
 import axios from 'axios';
 
 // components
@@ -29,6 +29,10 @@ function App() {
 
 	const [loggedIn, setLoggedIn] = useState(false);
 	const [userInfo, setUserInfo] = useState({});
+
+	useEffect(()=>{
+		console.log('changed?')
+	})
 	
 
 	
@@ -42,10 +46,10 @@ function App() {
 			<Container className="container">
 				<Routes>
 					<Route path="/" element={<Main loggedIn={loggedIn} setLoggedIn={setLoggedIn} userInfo={userInfo} setUserInfo={setUserInfo} />}></Route>
-					<Route path="/write" element={<Write />}></Route> {/* 게시글 등록 */}
-					<Route path="/edit/:postId" element={<Write />}></Route>
+					<Route path="/write" element={<Write page={'write'} />}></Route> {/* 게시글 등록 */}
+					<Route path="/edit/:postId" element={<Write page={'edit'}/>}></Route>
 					{/* 게시글 수정 */}
-					<Route path="/detail/:postId" element={<Detail />}></Route>
+					<Route path="/detail/:postId" element={<Detail loggedIn={loggedIn}/>}></Route>
 					<Route path="/mypage" element={<Mypage />}></Route>
 					<Route path="/signup" element={<Signup type="signup" loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUserInfo={setUserInfo} />}></Route> {/* 회원가입 */}
 					<Route path="/signin" element={<Signup type="signin" loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUserInfo={setUserInfo} />}></Route> {/* 로그인 */}
