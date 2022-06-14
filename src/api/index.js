@@ -10,7 +10,6 @@ const api = axios.create({
 
 export const apis = {
 	// user
-	getUserInfo: () => api.get('/user'),
 	signUp: (data) => api.post('/user_list', data),
 	signIn: (data) => api.post('/user', data),
 	userInfo: () => api.post('/user/auth'),
@@ -20,6 +19,12 @@ export const apis = {
 
 	// post
 	postList: () => api.get('/postList'),
+	postdetail: (post_id) => api.get('/postdetail', post_id),
+	rankingList: () => api.get('/ranking'),
+	updatePost: (postId) => api.put(`/api/post/${postId}`),
+
+	// file
+	
 
 
 	

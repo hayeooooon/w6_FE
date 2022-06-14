@@ -147,6 +147,58 @@ a.link{
   padding: 0;
   font-weight: 700;
 }
+a.btn{
+  display: inline-block;
+	height: 44px;
+	line-height: 42px;
+	outline: none;
+	border: none;
+	cursor: pointer;
+	padding: 0 15px;
+	border: 1px solid #ddd;
+	font-size: 1.5rem;
+	background-color: transparent;
+	color: #000;
+	border-color: #000;
+	font-weight: 500;
+	vertical-align: middle;
+}
+a.btn.primary{
+  color: #fff;
+  border-color: #000;
+  background-color: #000;
+}
+a.btn.point{
+  color: #f2b43f;
+  border-color: #f2b43f;
+  background-color: transparent;
+}
+a.btn.h_s{
+  height: 32px;
+  line-height: 30px;
+  font-size: 14px;
+}
+a.btn.h_xs{
+  height: 26px;
+  line-height: 24px;
+  font-size: 14px;
+}
+a.btn.w_m{
+  min-width: 140px;
+  padding: 0;
+  text-align: center;
+}
+a.btn.padding_s{
+  padding: 0 10px;
+}
+.btn+.btn,
+button+.btn{
+  margin-left: 12px;
+}
+.btn.s+.btn.s,
+button+.btn.s{
+  margin-left: 8px;
+}
 .fw_400{
   font-weight: 400;
 }
