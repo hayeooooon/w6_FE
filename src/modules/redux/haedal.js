@@ -80,15 +80,13 @@ export const loadPost = (post_data) => {
 // Middlewares
 export const loadPostsListAxios = () => { // 전체 게시글 리스트 불러오기
 	return async (dispatch) => {
-		await apis
-			.postList()
-			.then((res) => {
+		await apis.postList().then((res) => {
 				const post_list = res.data;
 				dispatch(loadPostsList(post_list));
 				
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	};
 };
@@ -100,6 +98,26 @@ export const loadPostAxios = (post_id) => { // 조회할 게시글 불러오기
 				const post_data = res.data;
 				//console.log(post_data)
 				dispatch(loadPost(post_data));
+			}
+		).catch(
+			err => {
+				console.log(err);
+			}
+		)
+	}
+}
+
+export const createPost = (post_data) => {
+	return async () => {
+		console.log(post_data)
+		const config = {
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+		}
+		await apis.createPost(post_data, config).then(
+			res => {
+				console.log(res);
 			}
 		).catch(
 			err => {

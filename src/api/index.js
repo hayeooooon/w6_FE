@@ -3,7 +3,6 @@ import axios from 'axios';
 const api = axios.create({
 	baseURL: 'http://3.35.230.132',
 });
-
 api.defaults.headers.common['Authorization'] = localStorage.getItem('token');
 
 
