@@ -10,11 +10,17 @@ const api = axios.create({
 
 export const apis = {
 	// user
+	getUserInfo: () => api.get('/user'),
 	signUp: (data) => api.post('/user_list', data),
 	signIn: (data) => api.post('/user', data),
 	userInfo: () => api.post('/user/auth'),
 	signOut: () => api.post('/user/logout'),
-	mypage: () => api.get('mypage'),
+	mypage: () => api.get('/mypage'),
+
+
+	// post
+	postList: () => api.get('/postList'),
+
 
 	
 
@@ -23,39 +29,21 @@ export const apis = {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	// article
-	add: (contents) => api.post('/api/articles', contents),
-	edit: (id, contents) => api.put(`api/articles/${id}`, contents),
-	del: (id) => api.delete(`api/articles/${id}`),
-	articles: () => api.get('/api/articles'),
-	article: (id) => api.get(`/api/articles/${id}`),
-	search: (value) => api.get(`/api/articles/search?query=${value}`),
+	// add: (contents) => api.post('/api/articles', contents),
+	// edit: (id, contents) => api.put(`api/articles/${id}`, contents),
+	// del: (id) => api.delete(`api/articles/${id}`),
+	// articles: () => api.get('/api/articles'),
+	// article: (id) => api.get(`/api/articles/${id}`),
+	// search: (value) => api.get(`/api/articles/search?query=${value}`),
 
-	// comment
-	addComment: (id, content) =>
-		api.post(`/api/articles/${id}/comments`, { content }),
-	comments: (id) => api.get(`/api/articles/${id}/comments`),
-	delComment: (id, coId) => api.delete(`/api/articles/${id}/comments/${coId}`),
-	editComment: (id, coId, content) =>
-		api.put(`/api/articles/${id}/comments/${coId}`, { content }),
+	// // comment
+	// addComment: (id, content) =>
+	// 	api.post(`/api/articles/${id}/comments`, { content }),
+	// comments: (id) => api.get(`/api/articles/${id}/comments`),
+	// delComment: (id, coId) => api.delete(`/api/articles/${id}/comments/${coId}`),
+	// editComment: (id, coId, content) =>
+	// 	api.put(`/api/articles/${id}/comments/${coId}`, { content }),
 
 	
 };
