@@ -50,7 +50,7 @@ export const loadPostsList = (posts) => {
 };
 
 export const loadPost = (post_data) => {
-	return { type: LOAD_SINGLE, post_data}
+	return { type: , post_data}
 }
 
 // Middlewares
@@ -68,10 +68,11 @@ export const loadPostsListAxios = () => { // 전체 게시글 리스트 불러�
 	};
 };
 
-export const loadPostAxios = (post_id) => { // 수정, 조회할 게시글 불러오기
+export const loadPostAxios = (post_id) => { // 조회할 게시글 불러오기
 	return async (dispatch) => {
 		await apis.postdetail(post_id).then(
 			res => {
+				console.log(res);
 				const post_data = res.data;
 				dispatch(loadPost(post_data))
 			}
@@ -83,11 +84,32 @@ export const loadPostAxios = (post_id) => { // 수정, 조회할 게시글 불�
 	}
 }
 
+
 export const updateHappyAxios = (post_id) => { // 게시글 수정
 	return async () => {
 		await apis.updatePost(post_id).then(
 			res => {
 				console.log(res, '업데이트 완료!');
+			}
+		).catch(
+			err => {
+				console.log(err);
+			}
+		)
+	}
+}
+
+export const createPost = (post_data) => {
+	return async () => {
+		console.log(post_data)
+		const config = {
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+		}
+		await apis.createPost(post_data, config).then(
+			res => {
+				console.log(res);
 			}
 		).catch(
 			err => {

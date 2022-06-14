@@ -43,6 +43,8 @@ export const signInAxios = (user_info) => {
   return async (dispatch) => {
     await apis.signIn(user_info).then(
       res => {
+        console.log(res) // data.id저장, headers.authorization
+        localStorage.setItem('token', res.headers.authorization); // token 저장
         const userId = res.data.id; // db 연결 후 : userId
         dispatch(signIn({...user_info, userId: userId}));
       }
@@ -63,8 +65,9 @@ export const signUpAxios = (user_info) => {
   return async (dispatch, useState, { history }) => {
     apis.signUp(user_info).then(
       async res => {
+        console.log(res)
         // await dispatch(signUp(user_info)); 회원 목록 저장할 필요가 없는 듯..?
-        history.push('/');
+        // history.push('/');
       }
     ).catch(
       err => {
@@ -77,7 +80,8 @@ export const loadMypageAxios = () => {
   return async (dispatch) => {
     await apis.mypage().then(
       res => {
-        dispatch(loadMypage(res.data[0]))
+        console.log(res);
+        dispatch(loadMypage(res.data))
       }
     ).catch(
       err => {

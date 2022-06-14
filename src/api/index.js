@@ -1,36 +1,29 @@
 import axios from 'axios';
 
 const api = axios.create({
-	baseURL: 'http://localhost:5001',
-	headers: {
-		'content-type': 'application/json;charset=UTF-8',
-		accept: 'application/json,',
-	},
+	baseURL: 'http://3.35.230.132',
 });
+
+api.defaults.headers.common['Authorization'] = localStorage.getItem('token');
+
 
 export const apis = {
 	// user
-	signUp: (data) => api.post('/user_list', data),
-	signIn: (data) => api.post('/user', data),
-	userInfo: () => api.post('/user/auth'),
+	signUp: (data) => api.post('/user/signup', data),
+	signIn: (data) => api.post('/user/login', data),
+	userInfo: () => api.post('/api/auth'),
 	signOut: () => api.post('/user/logout'),
-	mypage: () => api.get('/mypage'),
+	mypage: () => api.get('/api/mypage'),
 
 
 	// post
-	postList: () => api.get('/postList'),
-	postdetail: (post_id) => api.get('/postdetail', post_id),
-	rankingList: () => api.get('/ranking'),
+	postList: () => api.get('/api/postList'),	
+	postdetail: (post_id) => api.get(`/api/postdetail/${post_id}`),
+	rankingList: () => api.get('/api/ranking'),
 	updatePost: (postId) => api.put(`/api/post/${postId}`),
-
-	// file
+	createPost: (post_data, config) => api.post('/api/post', post_data, config),
 	
-
-
 	
-
-
-
 
 
 

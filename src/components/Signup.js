@@ -36,21 +36,21 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 					pw: pw,
 					pwcheck: pwcheck,
 				};
-				// dispatch(signUpAxios(data));
-				await apis.signUp(data).then(
-					res => {
-						console.log(res.data);
-						setUsername('');
-						setNickname('');
-						setPw('');
-						setPwcheck('');
-						navigate('/signin');
-					}
-				).catch(
-					err => {
-						console.error(err);
-					}
-				)
+				dispatch(signUpAxios(data));
+				// await apis.signUp(data).then(
+				// 	res => {
+				// 		console.log(res.data);
+				// 		setUsername('');
+				// 		setNickname('');
+				// 		setPw('');
+				// 		setPwcheck('');
+				// 		navigate('/signin');
+				// 	}
+				// ).catch(
+				// 	err => {
+				// 		console.error(err);
+				// 	}
+				// )
 				setClicked(false);
 				break;
 			}
