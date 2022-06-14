@@ -37,28 +37,8 @@ const Write = ({page}) => {
 			setFormdata(formData);
 			console.log(formData, score, uploadFile, content)
 			setFilename(e.target.files[0].name)
-
-
-			// await axios({
-			// 	method: "post",
-			// 	url: "/api/images",
-			// 	data: formData,
-			// 	headers: {
-			// 		"Content-Type": "multipart/form-data",
-			// 	},
-			// }).then(
-			// 	res => {
-			// 		console.log(res)
-			// 		setFilename(e.target.files[0].name); // 데이터 연결 후 res로 변경
-			// 	}
-			// ).catch(
-			// 	err => {
-			// 		console.error(err);
-			// 	}
-			// );
 		}
 	};
-
 	//todo: 게시글내용입력
 	const checkValidation = () => {
 		setClicked(true);

@@ -4,65 +4,41 @@ import styled from "styled-components";
 import Button from "./Button";
 import img_3 from "../images/img_3.jpeg";
 
-import { createHappy, loadContent } from "../modules/redux/haedal";
+import { createHappy, loadContent, loadPostAxios } from "../modules/redux/haedal";
 import { createComment } from "../modules/redux/comment";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-//useEffect(() => {컴포넌트가 화면에 그려질때 실행할 함수}, [의존성 배열])
-//(*의존성배열 : 배열에 넣은 값이 변했을 때 첫번째 인자 다시 실행)
 const Detail = ({loggedIn}) => {
 	const inputComment = React.useRef(null);
 	const dispatch = useDispatch(null);
 	const param = useParams();
 	const navigate = useNavigate();
-	//console.log(param)
-	//todo: 메인-디테일 연결(postid)
-	const contentDetail = useSelector((state) => state.haedal.post);
 
-	const [thispost, setThispost] = useState([]);
-	//console.log(thispost)
-
+  //todo: api연결 도전
 	useEffect(() => {
-		setThispost(contentDetail);
-	}, [contentDetail]);
-
-	useEffect(() => {
-		dispatch(loadContent(param.postId));
-		//console.log("아무거나")
+		dispatch(loadPostAxios(param.postId))
 	}, []);
-	console.log(loadContent(param.postId));
-	//todo: 메인-디테일 연결(happypoint)
+	
+	//todo: 메인-디테일 연결(postid&post)
+	const thispost = useSelector((state) => state.haedal.post);
+	console.log(thispost)
 	const scoreEmoji = ["😡", "☹️", "☺️", "😆", "😍"];
 	const scoreCharacter = ["최악", "나쁨", "보통", "좋음", "최상"];
-
-	//{scoreCharacter[v.happypoint-1]}
-
-	//todo: 댓글
-	const commentBox = () => {
-		dispatch(
-			createComment({
-				id: "일단 닉네임",
-				comment: inputComment.current.value,
-			})
-		);
-	};
-	const commentData = useSelector((state) => state.comment.list);
-	// dispatch(loadContent(param.postId))
 
 	return (
 		<div className="content">
 			<section>
 				<div className="set_inner">
 					<ImageArea>
-						<div style={{ backgroundImage: `url(${img_3})` }}></div>
+						<div style={{ backgroundImage: `url(${thispost[0].img})` }}></div>
 					</ImageArea>
 					<ContentArea>
 						<div className="info_area">
 							<p>
-								<span className="nickname">nickname</span>
+								<span className="nickname">{thispost[0].nickname}</span>
 								<p className="score">
 									<em>행복지수</em>
 									<strong>
@@ -96,7 +72,7 @@ const Detail = ({loggedIn}) => {
 			<section>
 				<div className="set_inner">
 					<SectionTitle>
-						<strong>nickname</strong>님과 자유롭게 소통해주세요!
+						<strong>{thispost[0].nickname}</strong>님과 자유롭게 소통해주세요!
 					</SectionTitle>
 					<CommentArea>
 						<div className="comment_write">
@@ -110,18 +86,18 @@ const Detail = ({loggedIn}) => {
 									</div>
 								</InputBox>
 								<div className="btn_box">
-									<Button st="primary" onClick={commentBox}>
+									<Button st="primary">
 										작성하기{" "}
 									</Button>
 								</div>
 							</InputArea>
 						</div>
-						{commentData.map((v, i) => {
+						{thispost[0].comments.map((v, i) => {
 							return (
 								<div className="comment_view" key={i}>
 									<ul>
 										<li>
-											<span>{v.id}</span>
+											<span>{v.nickname}</span>
 											<p>{v.comment}</p>
 											<div style={{ marginTop: "20px" }}>
 												<Button height="xs" padding="s">

@@ -22,8 +22,7 @@ export const apis = {
 	rankingList: () => api.get('/api/ranking'),
 	updatePost: (postId) => api.put(`/api/post/${postId}`),
 	createPost: (post_data, config) => api.post('/api/post', post_data, config),
-	
-	
+
 
 
 
