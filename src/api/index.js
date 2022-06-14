@@ -10,7 +10,7 @@ export const apis = {
 	// user
 	signUp: (data) => api.post('/user/signup', data),
 	signIn: (data) => api.post('/user/login', data),
-	userInfo: () => api.post('/api/auth'),
+	userInfo: () => api.get('/api/auth'),
 	signOut: () => api.post('/user/logout'),
 	mypage: () => api.get('/api/mypage'),
 
@@ -19,8 +19,8 @@ export const apis = {
 	postList: () => api.get('/api/postList'),	
 	postdetail: (post_id) => api.get(`/api/postdetail/${post_id}`),
 	rankingList: () => api.get('/api/ranking'),
-	updatePost: (postId) => api.put(`/api/post/${postId}`),
-	createPost: (post_data, config) => api.post('/api/post', post_data, config),
+	updatePost: (postId, formData) => api.put(`/api/post/${postId}`, formData),
+	createPost: (post_data, config) => api.post('/api/post', post_data),
 
 
 

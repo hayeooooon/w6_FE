@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
-const Detail = ({loggedIn}) => {
+const Detail = ({ loggedIn, userInfo }) => {
 	const dispatch = useDispatch(null);
 	const param = useParams();
 	const navigate = useNavigate();
@@ -20,9 +20,10 @@ const Detail = ({loggedIn}) => {
 	const scoreEmoji = ["😡", "☹️", "☺️", "😆", "😍"];
 	const scoreCharacter = ["최악", "나쁨", "보통", "좋음", "최상"];
 
-	useEffect(()=>{
-		dispatch(loadPostAxios(param.postId))
-	},[])
+	useEffect(() => {
+		dispatch(loadPostAxios(param.postId));
+	}, []);
+	console.log(thispost[0]);
 
 	return (
 		<div className="content">
@@ -54,15 +55,18 @@ const Detail = ({loggedIn}) => {
 							<p> {thispost.length > 0 ? thispost[0].content : ""}</p>
 						</div>
 					</ContentArea>
-					{loggedIn &&  ( // 데이터 연결 후 작성자 일치하는지 확인하는 조건 추가
-						<div
-							className="btn_area"
-							style={{ textAlign: "right", marginTop: "60px" }}
-						>
-							<Button>삭제</Button>
-							<Link to={`/edit/${param.postId}`} className="btn primary">수정</Link>
-						</div>
-					)}
+					{loggedIn &&
+						thispost[0]?.userId === userInfo?.userId / 1 && ( // 데이터 연결 후 작성자 일치하는지 확인하는 조건 추가
+							<div
+								className="btn_area"
+								style={{ textAlign: "right", marginTop: "60px" }}
+							>
+								<Button>삭제</Button>
+								<Link to={`/edit/${param.postId}`} className="btn primary">
+									수정
+								</Link>
+							</div>
+						)}
 				</div>
 			</section>
 			<section>
@@ -71,24 +75,28 @@ const Detail = ({loggedIn}) => {
 						<strong>{thispost[0]?.nickname}</strong>님과 자유롭게 소통해주세요!
 					</SectionTitle>
 					<CommentArea>
-						<div className="comment_write">
-							<InputArea className="input_area textarea comment">
-								<InputBox className="input_box">
-									<div>
-										<textarea
-											type="text"
-											placeholder="자유롭게 의견을 작성해주세요."
-										></textarea>
+						{loggedIn && (
+							<div className="comment_write">
+								<InputArea className="input_area textarea comment">
+									<InputBox className="input_box">
+										<div>
+											<textarea
+												type="text"
+												placeholder="자유롭게 의견을 작성해주세요."
+											></textarea>
+										</div>
+									</InputBox>
+									<div className="btn_box">
+										<Button st="primary">작성하기</Button>
 									</div>
-								</InputBox>
-								<div className="btn_box">
-									<Button st="primary">
-										작성하기{" "}
-									</Button>
-								</div>
-							</InputArea>
-						</div>
-						{thispost[0]?.comments.map((v, i) => {
+								</InputArea>
+							</div>
+						)}
+						{
+							thispost[0]?.comments.length > 0
+							? (
+								<>
+						{thispost[0].comments.map((v, i) => {
 							return (
 								<div className="comment_view" key={i}>
 									<ul>
@@ -108,11 +116,15 @@ const Detail = ({loggedIn}) => {
 								</div>
 							);
 						})}
+						</>
+							)
+							:
+							<p>등록된 댓글이 없습니다.</p>
+						}
 					</CommentArea>
 					<div className="btn_area">
-						<Button width="m">취소</Button>
-						<Button width="m" st="primary">
-							등록하기
+						<Button width="m" onClick={() => navigate("/")}>
+							목록으로
 						</Button>
 					</div>
 				</div>

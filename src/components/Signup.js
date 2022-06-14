@@ -81,6 +81,11 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 		}
 	}, [userInfoState]);
 
+	useEffect(()=>{
+		setClicked(false);
+		console.log('?')
+	},[])
+
 	
 	if(loggedIn) return (<Navigate to="/" replace />)
 	return (
