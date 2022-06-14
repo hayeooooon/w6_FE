@@ -31,7 +31,7 @@ function App() {
 	const [userInfo, setUserInfo] = useState({});
 
 	useEffect(()=>{
-		console.log('changed?')
+		console.log('changed?', loggedIn, userInfo)
 	})
 	
 
