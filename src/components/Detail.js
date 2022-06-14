@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Button from "./Button";
 import img_3 from "../images/img_3.jpeg";
 
-import { loadPostAxios } from "../modules/redux/haedal";
+import { loadPostAxios, deleteHappyAxios } from "../modules/redux/haedal";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -24,6 +24,9 @@ const Detail = ({ loggedIn, userInfo }) => {
 		dispatch(loadPostAxios(param.postId));
 	}, []);
 	console.log(thispost[0]);
+
+	//todo: 게시물 삭제*****
+	const deletePost = dispatch(deleteHappyAxios(param.postId));
 
 	return (
 		<div className="content">

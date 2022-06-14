@@ -6,7 +6,7 @@ const CREATE = "haedal/CREATE";
 const LOAD = "haedal/LOAD";
 const LOADCONTENT = "haedal/LOADCONTENT";
 //const  LOADPOINT = "haedal/LOADPOINT"
-const DELETE = "haedal/DELETE";
+const DELETECONTENT = "haedal/DELETE";
 const UPDATE = "haedal/UPDATE";
 const LOAD_LIST = "haedal/LOAD_LIST";
 const LOAD_SINGLE = "haedal/LOAD_SINGLE";
@@ -52,6 +52,13 @@ export const loadPostsList = (posts) => {
 export const loadPost = (post_data) => {
 	return { type: LOAD_SINGLE, post_data}
 }
+
+//todo: 게시물삭제(액션생성함수)
+export const deletePosts = (delete_data) => {
+	return { type : DELETECONTENT, delete_data}
+}
+
+
 
 // Middlewares
 export const loadPostsListAxios = () => { // 전체 게시글 리스트 불러오기
@@ -118,15 +125,23 @@ export const updateHappyAxios = (post_id, formData) => { // 게시글 수정
 		)
 	}
 }
+//todo: 게시글 삭제*****
+export const deleteHappyAxios = (post_id) => {
+	return async () => {
+		await apis.deletePosts(post_id).then(
+			res => {
+				console.log(res,'삭제 완료');
+			}
+		).catch(
+			err => {
+				console.log(err);
+			}
+		)
+	}
+}
 
-// Thunk function
-// todo: 게시물 서버연결
-// export const loadContents =
-//     () =>
-//         (dispatch, getState) => {
-//             try {
-//             }catch{}
-//         };
+
+
 
 //Reducer
 export default function reducer(state = initialState, action = {}) {
@@ -153,6 +168,19 @@ export default function reducer(state = initialState, action = {}) {
 			const post_data = [action.post_data];
 			return { list: state.list, post: post_data};
 		}
+
+		//todo: 게시글 삭제(리듀서)*****
+		case "haedal/DELETECONTENT": {
+			const post_delete = state.list.filter((v) => {
+				return parseInt(action.delete_data) !== action.postid;
+			})
+			return {list:state.list, post : []}
+		}
+
+
+
+
+
 		default:
 			return state;
 	}

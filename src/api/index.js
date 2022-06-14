@@ -19,9 +19,9 @@ export const apis = {
 	postList: () => api.get('/api/postList'),	
 	postdetail: (post_id) => api.get(`/api/postdetail/${post_id}`),
 	rankingList: () => api.get('/api/ranking'),
-	updatePost: (postId, formData) => api.put(`/api/post/${postId}`, formData),
-	createPost: (post_data, config) => api.post('/api/post', post_data),
-
+	updatePost: (postId) => api.put(`/api/post/${postId}`),
+	createPost: (post_data, config) => api.post('/api/post', post_data, config),
+	deletePost: (postId) => api.delete(`/api/post/${postId}`)
 
 
 
