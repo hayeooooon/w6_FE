@@ -14,8 +14,13 @@ const Mypage = () => {
 	const dispatch = useDispatch();
 	const datas = useSelector((state) => state.user.mypage);
 	const [mypage, setMypage] = useState(null);
-	const scoreEmoji = ["😡", "☹️", "☺️", "😆", "😍"];
-	const scoreWords = ["최악", "나쁨", "보통", "좋음", "최상"];
+	const scores = [
+		{ emoji: "😡", text: "최악" },
+		{ emoji: "☹️", text: "나쁨" },
+		{ emoji: "☺️", text: "보통" },
+		{ emoji: "😆", text: "좋음" },
+		{ emoji: "😍", text: "최상" },
+	];
 
 	useEffect(() => {
 		dispatch(loadMypageAxios());
@@ -46,7 +51,7 @@ const Mypage = () => {
 				<section>
 					<div className="posts_area">
 						<SectionSubTitle>
-							<span>Niciname 님이 작성한 게시글</span>
+							<span>{mypage?.nickname} 님이 작성한 게시글</span>
 						</SectionSubTitle>
 						<PostsWrap>
 							<PostsGroup>
@@ -61,10 +66,15 @@ const Mypage = () => {
 												<div>
 													<div className="score_area">
 														<span>
-															행복지수 <strong>{scoreWords[v.happypoint-1]}</strong>
+															행복지수{" "}
+															<strong>
+																{Object.values(scores[v.happypoint - 1])[1]}
+															</strong>
 														</span>
 														<br />
-														<strong>{scoreEmoji[v.happypoint - 1]}</strong>
+														<strong>
+															{Object.values(scores[v.happypoint - 1])[0]}
+														</strong>
 													</div>
 													<div className="text_area">
 														<span>

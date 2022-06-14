@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Link, useNavigate, useParams} from "react-router-dom";
-import{useSelector, useDispatch, } from "react-redux";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import img_1 from "../images/img_1.jpeg";
 import img_2 from "../images/img_2.jpeg";
 import img_3 from "../images/img_3.jpeg";
 import img_4 from "../images/img_4.jpeg";
+import { loadPostsListAxios } from "../modules/redux/haedal";
+import { getUserInfoAxios } from "../modules/redux/user";
 
-const Main = () => {
+const Main = ({ loggedIn, setLoggedIn, userInfo, setUserInfo }) => {
+	// const dispatch = useDispatch();
+	// dispatch(getUserInfoAxios()); 메인 comp에서 로그인 정보 확인 요청을 또 해야하나..?
+	console.log('userInfo',userInfo)
 	return (
 		<div className="content">
 			<TopArea>
@@ -24,7 +28,7 @@ const Main = () => {
 				</div>
 			</TopArea>
 			<RankingArea></RankingArea>
-			<PostsArea></PostsArea>
+			<PostsArea loggedIn={loggedIn}></PostsArea>
 		</div>
 	);
 };
@@ -63,6 +67,17 @@ const SectionTitle = styled.h3`
 `;
 
 const RankingArea = () => {
+	const dispatch = useDispatch();
+	const datas = useSelector((state) => state.haedal.list);
+	const [posts, setPosts] = useState([]);
+	useEffect(() => {
+		dispatch(loadPostsListAxios());
+	}, []);
+
+	useEffect(() => {
+		setPosts(datas);
+	}, [datas]);
+
 	return (
 		<Ranking>
 			<div className="set_inner">
@@ -148,8 +163,8 @@ const RankItemGroup = styled.ul`
 		&:nth-of-type(4),
 		&:nth-of-type(5) {
 			span {
-				color: #BAAB93;
-				background: #F3EDE2;
+				color: #baab93;
+				background: #f3ede2;
 			}
 		}
 		span {
@@ -175,61 +190,69 @@ const RankItemGroup = styled.ul`
 	}
 `;
 
-const PostsArea = () => {
-	const [postId] = useState(0); // 임시 data
+const PostsArea = ({loggedIn}) => {
 	const navigate = useNavigate();
-	const index = useParams();
-	
-	// //todo: PostItem map돌리려구 하는 중
-	const datas = useSelector((state) => state.haedal.list)
-	//console.log(datas)
-	const scoreEmoji = ['😡','☹️','☺️','😆','😍']
-	const scoreCharacter = ['최악','나쁨','보통','좋음','최상']
+	const dispatch = useDispatch();
+	const datas = useSelector((state) => state.haedal.list);
+	const [posts, setPosts] = useState([]);
+	useEffect(() => {
+		dispatch(loadPostsListAxios());
+	}, []);
 
-
-
+	useEffect(() => {
+		setPosts(datas);
+	}, [datas]);
+	const scores = [
+		{ emoji: "😡", text: "최악" },
+		{ emoji: "☹️", text: "나쁨" },
+		{ emoji: "☺️", text: "보통" },
+		{ emoji: "😆", text: "좋음" },
+		{ emoji: "😍", text: "최상" },
+	];
 	return (
 		<>
 			<PostsWrap>
 				<div className="set_inner">
 					<SectionTitle>행복 러너들의 이야기</SectionTitle>
-						 <PostsGroup>
-						 {datas.map((v,i) => {
-									 return(	
-							 <PostItem key={i}>
-							<Link to={`/detail/${v.id}`} className="inner">
-
-								<span
-									className="img_box"
-									style={{ backgroundImage: `url(${img_1})` }}
-						 ></span>
-								<div>
-									<div className="score_area">
-										<span>
-											행복지수 <strong>{scoreCharacter[v.happypoint-1]}</strong>
-										</span>
-										<br />
-										<strong>{scoreEmoji[v.happypoint-1]}</strong>
-									</div>
-									<div className="text_area">
-										<span>
-											Happy Runner <strong>Nickname</strong>
-										</span>
-										<p>
-											{v.content}
-										</p>
-									</div>
-								</div>
-								<em>VIEW MORE</em>
-							</Link>
-							 </PostItem>
-							  
-						 );
+					<PostsGroup>
+						{posts.map((v, i) => {
+							return (
+								<PostItem key={i}>
+									<Link to={`/detail/${v.postId}`} className="inner">
+										<span
+											className="img_box"
+											style={{ backgroundImage: `url(${v.img})` }}
+										></span>
+										<div>
+											<div className="score_area">
+												<span>
+													행복지수 <strong>{Object.values(scores[v.happypoint - 1])[1]}</strong>
+												</span>
+												<br />
+												<strong>{Object.values(scores[v.happypoint - 1])[0]}</strong>
+											</div>
+											<div className="text_area">
+												<span>
+													Happy Runner <strong>{v.nickname}</strong>
+												</span>
+												<p>{v.content}</p>
+											</div>
+										</div>
+										<em>VIEW MORE</em>
+									</Link>
+								</PostItem>
+							);
 						})}
-						</PostsGroup>
-						</div>
-					</PostsWrap>
-			<RegisterButton onClick={() => navigate("/write")}>
+					</PostsGroup>
+				</div>
+			</PostsWrap>
+			<RegisterButton onClick={() => {
+				if(!loggedIn){
+					window.alert('로그인 후 게시글 작성 가능합니다.');
+					return navigate('/signin');
+				}
+				navigate("/write");
+			}}>
 				<span>새글 작성하기</span>
 			</RegisterButton>
 		</>

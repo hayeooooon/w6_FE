@@ -41,7 +41,7 @@ function App() {
 			<Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} userInfo={userInfo} setUserInfo={setUserInfo}></Header>
 			<Container className="container">
 				<Routes>
-					<Route path="/" element={<Main/>}></Route>
+					<Route path="/" element={<Main loggedIn={loggedIn} setLoggedIn={setLoggedIn} userInfo={userInfo} setUserInfo={setUserInfo} />}></Route>
 					<Route path="/write" element={<Write />}></Route> {/* 게시글 등록 */}
 					<Route path="/edit/:postId" element={<Write />}></Route>
 					{/* 게시글 수정 */}

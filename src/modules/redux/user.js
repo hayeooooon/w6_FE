@@ -28,11 +28,29 @@ export const loadMypage = (mypage_data) => {
 }
 
 // middlewares
+export const getUserInfoAxios = () => {
+  return async (dispatch) => {
+    await apis.getUserInfo().then(
+      res => {
+        const user_info = res.data;
+        console.log(user_info)
+        dispatch(signIn(user_info));
+      }
+    )
+  }
+}
 export const signInAxios = (user_info) => {
   return async (dispatch) => {
-    const user = await apis.signIn(user_info);
-    const userId = user.data.id; // db 연결 후 : userId
-    dispatch(signIn({...user_info, userId: userId}));
+    await apis.signIn(user_info).then(
+      res => {
+        const userId = res.data.id; // db 연결 후 : userId
+        dispatch(signIn({...user_info, userId: userId}));
+      }
+    ).catch(
+      err => {
+        console.log(err);
+      }
+    )
   }
 }
 export const signOutAxios = () => {
@@ -43,15 +61,29 @@ export const signOutAxios = () => {
 }
 export const signUpAxios = (user_info) => {
   return async (dispatch, useState, { history }) => {
-    await apis.signUp(user_info);
-    await dispatch(signUp(user_info));
-    history.push('/', {replace: true});
+    apis.signUp(user_info).then(
+      async res => {
+        // await dispatch(signUp(user_info)); 회원 목록 저장할 필요가 없는 듯..?
+        history.push('/', {replace: true});
+      }
+    ).catch(
+      err => {
+        console.log(err);
+      }
+    )
   }
 }
 export const loadMypageAxios = () => {
   return async (dispatch) => {
-    const mypageData = await apis.mypage();
-    dispatch(loadMypage(mypageData.data[0]))
+    await apis.mypage().then(
+      res => {
+        dispatch(loadMypage(res.data[0]))
+      }
+    ).catch(
+      err => {
+        console.log(err);
+      }
+    )
   }
 }
 
