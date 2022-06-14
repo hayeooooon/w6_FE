@@ -1,14 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import img_1 from "../images/img_1.jpeg";
 import img_2 from "../images/img_2.jpeg";
 import img_3 from "../images/img_3.jpeg";
 import img_4 from "../images/img_4.jpeg";
+import { loadMypageAxios } from "../modules/redux/user";
 
 const Mypage = () => {
 	const [postId] = useState(0); // 임시 data
+	const dispatch = useDispatch();
+	const datas = useSelector((state) => state.user.mypage);
+	const [mypage, setMypage] = useState(null);
+	const scoreEmoji = ["😡", "☹️", "☺️", "😆", "😍"];
+	const scoreWords = ["최악", "나쁨", "보통", "좋음", "최상"];
+
+	useEffect(() => {
+		dispatch(loadMypageAxios());
+	}, []);
+	useEffect(() => {
+		setMypage(datas.length > 0 ? datas[0] : null);
+	}, [datas]);
 
 	return (
 		<div className="content">
@@ -16,14 +30,15 @@ const Mypage = () => {
 				<section>
 					<MypageWrap>
 						<SectionTitle>
-							<strong>Niciname</strong>님, 환영합니다!
+							<strong>{mypage?.nickname}</strong>님, 환영합니다!
 						</SectionTitle>
 						<div className="ranking_info">
 							<SectionSubTitle>
-								<span>Niciname 님의 현재 랭킹</span>
+								<span>{mypage?.nickname} 님의 현재 랭킹</span>
 							</SectionSubTitle>
-							<p class="ranking">
-								총 <span>100</span>명의 러너 중 <span>53</span>위 입니다.
+							<p className="ranking">
+								총 <span>{mypage?.totalUser}</span>명의 러너 중{" "}
+								<span>{mypage?.myRank}</span>위 입니다.
 							</p>
 						</div>
 					</MypageWrap>
@@ -35,108 +50,34 @@ const Mypage = () => {
 						</SectionSubTitle>
 						<PostsWrap>
 							<PostsGroup>
-								<PostItem>
-									<Link to={`/detail/${postId}`} className="inner">
-										<span
-											className="img_box"
-											style={{ backgroundImage: `url(${img_1})` }}
-										></span>
-										<div>
-											<div className="score_area">
-												<span>행복지수</span>
-												<br />
-												<strong>😍</strong>
-											</div>
-											<div className="text_area">
-												<span>
-													Happy Runner <strong>Nickname</strong>
-												</span>
-												<p>
-													오늘 하늘이 너무 예뻤어요! 너무 피곤했는데 산책갔다가
-													하늘이 너무 예뻐서 힐링하고 왔습니다.
-												</p>
-											</div>
-										</div>
-										<em>VIEW MORE</em>
-									</Link>
-								</PostItem>
-								<PostItem>
-									<Link to={`/detail/${postId}`} className="inner">
-										<span
-											className="img_box"
-											style={{ backgroundImage: `url(${img_2})` }}
-										></span>
-										<div>
-											<div className="score_area">
-												<span>행복지수</span>
-												<br />
-												<strong>☺️</strong>
-											</div>
-											<div className="text_area">
-												<span>
-													Happy Runner <strong>Nickname</strong>
-												</span>
-												<p>
-													오늘 하늘이 너무 예뻤어요! 너무 피곤했는데 산책갔다가
-													하늘이 너무 예뻐서 힐링하고 왔습니다.
-												</p>
-											</div>
-										</div>
-										<em>VIEW MORE</em>
-									</Link>
-								</PostItem>
-								<PostItem>
-									<Link to={`/detail/${postId}`} className="inner">
-										<span
-											className="img_box"
-											style={{ backgroundImage: `url(${img_3})` }}
-										></span>
-
-										<div>
-											<div className="score_area">
-												<span>행복지수</span>
-												<br />
-												<strong>☹️</strong>
-											</div>
-											<div className="text_area">
-												<span>
-													Happy Runner <strong>Nickname</strong>
-												</span>
-												<p>
-													오늘 하늘이 너무 예뻤어요! 너무 피곤했는데 산책갔다가
-													하늘이 너무 예뻐서 힐링하고 왔습니다.
-												</p>
-											</div>
-										</div>
-										<em>VIEW MORE</em>
-									</Link>
-								</PostItem>
-								<PostItem>
-									<Link to={`/detail/${postId}`} className="inner">
-										<span
-											className="img_box"
-											style={{ backgroundImage: `url(${img_4})` }}
-										></span>
-
-										<div>
-											<div className="score_area">
-												<span>행복지수</span>
-												<br />
-												<strong>😆</strong>
-											</div>
-											<div className="text_area">
-												<span>
-													Happy Runner <strong>Nickname</strong>
-												</span>
-												<p>
-													오늘 하늘이 너무 예뻤어요! 너무 피곤했는데 산책갔다가
-													하늘이 너무 예뻐서 힐링하고 왔습니다.
-												</p>
-											</div>
-										</div>
-										<em>VIEW MORE</em>
-									</Link>
-								</PostItem>
+								{mypage?.posts.map((v, i) => {
+									return (
+										<PostItem key={i}>
+											<Link to={`/detail/${postId}`} className="inner">
+												<span
+													className="img_box"
+													style={{ backgroundImage: `url(${v.img})` }}
+												></span>
+												<div>
+													<div className="score_area">
+														<span>
+															행복지수 <strong>{scoreWords[v.happypoint-1]}</strong>
+														</span>
+														<br />
+														<strong>{scoreEmoji[v.happypoint - 1]}</strong>
+													</div>
+													<div className="text_area">
+														<span>
+															Happy Runner <strong>{mypage.nickname}</strong>
+														</span>
+														<p>{v.content}</p>
+													</div>
+												</div>
+												<em>VIEW MORE</em>
+											</Link>
+										</PostItem>
+									);
+								})}
 							</PostsGroup>
 						</PostsWrap>
 					</div>
@@ -148,13 +89,14 @@ const Mypage = () => {
 
 const MypageWrap = styled.div`
 	.ranking_info {
-    padding-top: 60px;
-    .ranking {
-		font-size: 4rem;
-		font-weight: 300;
-		span {
-			font-weight: 500;
-		}}
+		padding-top: 60px;
+		.ranking {
+			font-size: 4rem;
+			font-weight: 300;
+			span {
+				font-weight: 500;
+			}
+		}
 	}
 `;
 const SectionTitle = styled.h3`
@@ -186,7 +128,7 @@ const SectionSubTitle = styled.p`
 	}
 `;
 const PostsWrap = styled.div`
-  padding-top: 20px;
+	padding-top: 20px;
 `;
 const PostsGroup = styled.ul`
 	display: flex;
@@ -252,13 +194,16 @@ const PostItem = styled.li`
 				&.score_area {
 					span {
 						display: inline-block;
-						font-size: 1.2rem;
+						font-size: 1.4rem;
 						margin-bottom: 4px;
 						color: #fff;
 						line-height: 2rem;
 						padding: 0 7px;
 						border: 1px solid #fff;
 						border-radius: 5px;
+						strong {
+							font-size: 1.4rem;
+						}
 					}
 					strong {
 						display: inline-block;

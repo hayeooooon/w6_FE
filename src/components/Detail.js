@@ -4,8 +4,8 @@ import styled from "styled-components";
 import Button from "./Button";
 import img_3 from "../images/img_3.jpeg";
 
-import {createHappy, loadContent} from "../redux/modules/haedal";
-import {createComment} from"../redux/modules/comment";
+import {createHappy, loadContent} from "../modules/redux/haedal";
+import {createComment} from"../modules/redux/comment";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import {useParams} from "react-router-dom"
