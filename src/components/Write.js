@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import {createHappy} from "../redux/modules/haedal";
+import {createHappy} from "../modules/redux/haedal";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
