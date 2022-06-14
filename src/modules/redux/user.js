@@ -44,9 +44,11 @@ export const signInAxios = (user_info) => {
     await apis.signIn(user_info).then(
       res => {
         console.log(res) // data.id저장, headers.authorization
-        localStorage.setItem('token', res.headers.authorization); // token 저장
         const userNickname = res.data.nickname; 
         const userId = res.data.userId; 
+        localStorage.setItem('token', res.headers.authorization); // token 저장
+        localStorage.setItem("nickname", JSON.stringify(userNickname));
+        localStorage.setItem("userId", JSON.stringify(userId));
         dispatch(signIn({nickname: userNickname, userId: userId}));
       }
     ).catch(
@@ -58,7 +60,7 @@ export const signInAxios = (user_info) => {
 }
 export const signOutAxios = () => {
   return async (dispatch) => {
-    // apis.signOut(); db 연결 후 살리기
+    localStorage.clear();
     dispatch(signOut());
   }
 }

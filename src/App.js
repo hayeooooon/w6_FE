@@ -2,7 +2,9 @@ import "./App.css";
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import { Router, Routes, Route } from "react-router-dom";
+import { useSelector } from 'react-redux';
 import axios from 'axios';
+import {apis} from './api/index';
 
 // components
 import Header from "./components/Header";
@@ -13,6 +15,7 @@ import Detail from "./components/Detail";
 import Mypage from "./components/Mypage";
 import Signup from "./components/Signup";
 import Button from "./components/Button";
+import { useDispatch } from "react-redux";
 
 function App() {
 	/**
@@ -24,15 +27,28 @@ function App() {
 	 * 로그인/회원가입 Signup.js
 	 */
 
+	const dispatch = useDispatch();
 	const [isLoading, setIsLoading] = useState(true);
 	const [isError, setIsErro] = useState(false);
 
 	const [loggedIn, setLoggedIn] = useState(false);
 	const [userInfo, setUserInfo] = useState({});
 
+	const user = useSelector(state=>state.user.user);
+	console.log(user)
+
+	const getUserInfo = async () => {
+		const nickname = await localStorage.getItem('nickname');
+		const userId = await localStorage.getItem('userId');
+		if(nickname && userId){
+			setUserInfo({nickname: nickname, userId: userId});
+			setLoggedIn(true);
+		}
+	}
 	useEffect(()=>{
-		console.log('changed?', loggedIn, userInfo)
-	})
+		getUserInfo();
+	},[])
+	console.log('logged in?', loggedIn)
 	
 
 	
@@ -49,7 +65,7 @@ function App() {
 					<Route path="/write" element={<Write page={'write'} />}></Route> {/* 게시글 등록 */}
 					<Route path="/edit/:postId" element={<Write page={'edit'}/>}></Route>
 					{/* 게시글 수정 */}
-					<Route path="/detail/:postId" element={<Detail loggedIn={loggedIn}/>}></Route>
+					<Route path="/detail/:postId" element={<Detail loggedIn={loggedIn} userInfo={userInfo}/>}></Route>
 					<Route path="/mypage" element={<Mypage />}></Route>
 					<Route path="/signup" element={<Signup type="signup" loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUserInfo={setUserInfo} />}></Route> {/* 회원가입 */}
 					<Route path="/signin" element={<Signup type="signin" loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUserInfo={setUserInfo} />}></Route> {/* 로그인 */}
