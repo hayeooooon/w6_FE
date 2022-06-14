@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Button from "./Button";
 import img_3 from "../images/img_3.jpeg";
 
-import { loadPostAxios } from "../modules/redux/haedal";
+import { loadPostAxios, deleteHappyAxios } from "../modules/redux/haedal";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -20,9 +20,13 @@ const Detail = ({loggedIn}) => {
 	const scoreEmoji = ["😡", "☹️", "☺️", "😆", "😍"];
 	const scoreCharacter = ["최악", "나쁨", "보통", "좋음", "최상"];
 
+	//todo: 게시물 서버에서 불러오기
 	useEffect(()=>{
 		dispatch(loadPostAxios(param.postId))
 	},[])
+
+	//todo: 게시물 삭제*****
+	const deletePost = dispatch(deleteHappyAxios(param.postId));
 
 	return (
 		<div className="content">
@@ -59,7 +63,7 @@ const Detail = ({loggedIn}) => {
 							className="btn_area"
 							style={{ textAlign: "right", marginTop: "60px" }}
 						>
-							<Button>삭제</Button>
+							<Button onClick={deletePost}>삭제</Button>
 							<Link to={`/edit/${param.postId}`} className="btn primary">수정</Link>
 						</div>
 					)}

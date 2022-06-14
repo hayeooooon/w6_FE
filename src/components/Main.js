@@ -215,12 +215,12 @@ const PostsArea = ({ loggedIn }) => {
 												<span>
 													행복지수{" "}
 													<strong>
-														{Object.values(scores[v.happypoint - 1])[1]}
+														{/* {Object.values(scores[v.happypoint - 1])[1]} */}
 													</strong>
 												</span>
 												<br />
 												<strong>
-													{Object.values(scores[v.happypoint - 1])[0]}
+													{/* {Object.values(scores[v.happypoint - 1])[0]} */}
 												</strong>
 											</div>
 											<div className="text_area">
@@ -268,7 +268,6 @@ const PostItem = styled.li`
 		position: relative;
 		border-radius: 10px;
 		overflow: hidden;
-
 		&:hover {
 			.img_box {
 				transform: scale(1.05);
@@ -277,7 +276,6 @@ const PostItem = styled.li`
 				}
 			}
 		}
-
 		.img_box {
 			position: relative;
 			display: block;
@@ -287,7 +285,6 @@ const PostItem = styled.li`
 			height: 0;
 			padding-bottom: 140%;
 			transition: ease-out 0.4s;
-
 			&:before {
 				position: absolute;
 				left: 0;

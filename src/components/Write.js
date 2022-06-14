@@ -39,7 +39,7 @@ const Write = ({page}) => {
 			setFilename(e.target.files[0].name)
 		}
 	};
-	//todo: 게시글내용입력
+	
 	const checkValidation = () => {
 		setClicked(true);
 		for(let i=0; i<inputs.length; i++){
