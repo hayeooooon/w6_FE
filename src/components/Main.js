@@ -209,7 +209,6 @@ const PostsArea = ({loggedIn}) => {
 		{ emoji: "😆", text: "좋음" },
 		{ emoji: "😍", text: "최상" },
 	];
-	
 	return (
 		<>
 			<PostsWrap>
