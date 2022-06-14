@@ -45,8 +45,9 @@ export const signInAxios = (user_info) => {
       res => {
         console.log(res) // data.id저장, headers.authorization
         localStorage.setItem('token', res.headers.authorization); // token 저장
-        const userId = res.data.id; // db 연결 후 : userId
-        dispatch(signIn({...user_info, userId: userId}));
+        const userNickname = res.data.nickname; 
+        const userId = res.data.userId; 
+        dispatch(signIn({nickname: userNickname, userId: userId}));
       }
     ).catch(
       err => {

@@ -4,42 +4,38 @@ import styled from "styled-components";
 import Button from "./Button";
 import img_3 from "../images/img_3.jpeg";
 
-import { createHappy, loadContent, loadPostAxios } from "../modules/redux/haedal";
-import { createComment } from "../modules/redux/comment";
+import { loadPostAxios } from "../modules/redux/haedal";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 
 const Detail = ({loggedIn}) => {
-	const inputComment = React.useRef(null);
 	const dispatch = useDispatch(null);
 	const param = useParams();
 	const navigate = useNavigate();
+	const [post, setPost] = useState();
 
-  //todo: api연결 도전
-	useEffect(() => {
-		dispatch(loadPostAxios(param.postId))
-	}, []);
-	
 	//todo: 메인-디테일 연결(postid&post)
 	const thispost = useSelector((state) => state.haedal.post);
-	console.log(thispost)
 	const scoreEmoji = ["😡", "☹️", "☺️", "😆", "😍"];
 	const scoreCharacter = ["최악", "나쁨", "보통", "좋음", "최상"];
+
+	useEffect(()=>{
+		dispatch(loadPostAxios(param.postId))
+	},[])
 
 	return (
 		<div className="content">
 			<section>
 				<div className="set_inner">
 					<ImageArea>
-						<div style={{ backgroundImage: `url(${thispost[0].img})` }}></div>
+						<div style={{ backgroundImage: `url(${thispost[0]?.img})` }}></div>
 					</ImageArea>
 					<ContentArea>
 						<div className="info_area">
 							<p>
-								<span className="nickname">{thispost[0].nickname}</span>
-								<p className="score">
+								<span className="nickname">{thispost[0]?.nickname}</span>
+								<span className="score">
 									<em>행복지수</em>
 									<strong>
 										{thispost.length > 0
@@ -51,10 +47,10 @@ const Detail = ({loggedIn}) => {
 												: ""}
 										</i>
 									</strong>
-								</p>
+								</span>
 							</p>
 						</div>
-						<div class="content_area">
+						<div className="content_area">
 							<p> {thispost.length > 0 ? thispost[0].content : ""}</p>
 						</div>
 					</ContentArea>
@@ -72,7 +68,7 @@ const Detail = ({loggedIn}) => {
 			<section>
 				<div className="set_inner">
 					<SectionTitle>
-						<strong>{thispost[0].nickname}</strong>님과 자유롭게 소통해주세요!
+						<strong>{thispost[0]?.nickname}</strong>님과 자유롭게 소통해주세요!
 					</SectionTitle>
 					<CommentArea>
 						<div className="comment_write">
@@ -92,7 +88,7 @@ const Detail = ({loggedIn}) => {
 								</div>
 							</InputArea>
 						</div>
-						{thispost[0].comments.map((v, i) => {
+						{thispost[0]?.comments.map((v, i) => {
 							return (
 								<div className="comment_view" key={i}>
 									<ul>
@@ -172,6 +168,7 @@ const ContentArea = styled.div`
 					font-size: 2.4rem;
 					font-style: normal;
 					margin-top: -0.25em;
+					margin-left: 4px;
 				}
 			}
 		}

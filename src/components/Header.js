@@ -18,7 +18,7 @@ const Header = ({ loggedIn, setLoggedIn, userInfo, setUserInfo}) => {
 	const header_btns = loggedIn ? (
 		<>
 			<Link className="link" to="/mypage">
-			<span className="fw_400">Happy Runner </span>{userInfo.username}
+			<span className="fw_400">Happy Runner </span>{userInfo.nickname}
 			</Link>
 			<Button st="text" onClick={logout}>
 				로그아웃

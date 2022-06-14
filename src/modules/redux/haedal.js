@@ -28,31 +28,7 @@ const initialState = {
 			content: "하하gg하",
 		},
 	],
-	post: [
-		{
-			nickname : "글쓰는 햄토리",
-			happypoint : 5,
-			img :"",
-			content: "힘내자 힘!!",
-			userId: 0,
-			comments: [
-			{
-				"commentId": 0,
-				"comment": "파이팅!!! 이건 코멘트",
-				"nickname": "뿌꾸",
-				"userId": 1
-			},
-			{
-				"commentId": 1,
-				"comment": "행복합시다 이것도 코멘트",
-				"nickname": "덩치",
-				"userId": 2
-			},
-			],
-			}
-
-
-	],
+	post: [],
 };
 
 //Action creator
