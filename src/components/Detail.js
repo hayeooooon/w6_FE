@@ -9,16 +9,15 @@ import { createComment } from "../modules/redux/comment";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import apis from "../api";
+import axios from "axios";
 
 const Detail = ({loggedIn}) => {
 	const inputComment = React.useRef(null);
 	const dispatch = useDispatch(null);
 	const param = useParams();
 	const navigate = useNavigate();
-	//console.log(param)
-	
-	//todo: api연결 도전
+
+  //todo: api연결 도전
 	useEffect(() => {
 		dispatch(loadPostAxios(param.postId))
 	}, []);
@@ -26,32 +25,8 @@ const Detail = ({loggedIn}) => {
 	//todo: 메인-디테일 연결(postid&post)
 	const thispost = useSelector((state) => state.haedal.post);
 	console.log(thispost)
-	//console.log(thispost[0].comments)
-	// const [thispost, setThispost] = useState([]);
-	// useEffect(() => {
-	// 	setThispost(contentDetail);
-	// }, [contentDetail]);
-	// useEffect(() => {
-	// 	dispatch(loadContent(param.postId));
-	// 	//console.log("아무거나")
-	// }, []);
-
-	// console.log(loadContent(param.postId));
-	//todo: 메인-디테일 연결(happypoint)
 	const scoreEmoji = ["😡", "☹️", "☺️", "😆", "😍"];
 	const scoreCharacter = ["최악", "나쁨", "보통", "좋음", "최상"];
-
-	//todo: 댓글
-	// const commentBox = () => {
-	// 	dispatch(
-	// 		createComment({
-	// 			id: "일단 닉네임",
-	// 			comment: inputComment.current.value,
-	// 		})
-	// 	);
-	// };
-	// const commentData = useSelector((state) => state.comment.list);
-	// dispatch(loadContent(param.postId))
 
 	return (
 		<div className="content">
@@ -124,7 +99,6 @@ const Detail = ({loggedIn}) => {
 										<li>
 											<span>{v.nickname}</span>
 											<p>{v.comment}</p>
-							
 											<div style={{ marginTop: "20px" }}>
 												<Button height="xs" padding="s">
 													삭제
@@ -137,9 +111,7 @@ const Detail = ({loggedIn}) => {
 									</ul>
 								</div>
 							);
-
 						})}
-					
 					</CommentArea>
 					<div className="btn_area">
 						<Button width="m">취소</Button>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { apis } from "../api/index";
 
 import img_1 from "../images/img_1.jpeg";
 import img_2 from "../images/img_2.jpeg";
@@ -13,7 +14,7 @@ import { getUserInfoAxios } from "../modules/redux/user";
 const Main = ({ loggedIn, setLoggedIn, userInfo, setUserInfo }) => {
 	// const dispatch = useDispatch();
 	// dispatch(getUserInfoAxios()); 메인 comp에서 로그인 정보 확인 요청을 또 해야하나..?
-	console.log('userInfo',userInfo)
+	console.log("userInfo", userInfo);
 	return (
 		<div className="content">
 			<TopArea>
@@ -67,16 +68,17 @@ const SectionTitle = styled.h3`
 `;
 
 const RankingArea = () => {
-	const dispatch = useDispatch();
-	const datas = useSelector((state) => state.haedal.list);
-	const [posts, setPosts] = useState([]);
+	const [rankingList, setRankingList] = useState([]);
 	useEffect(() => {
-		dispatch(loadPostsListAxios());
+		apis
+			.rankingList()
+			.then((res) => {
+				setRankingList(res.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	}, []);
-
-	useEffect(() => {
-		setPosts(datas);
-	}, [datas]);
 
 	return (
 		<Ranking>
@@ -85,36 +87,20 @@ const RankingArea = () => {
 					<SectionTitle>행복 지수 랭킹 상위 러너들을 소개합니다!</SectionTitle>
 				</div>
 				<RankItemGroup>
-					<li>
-						<span>
-							<strong>1</strong>st
-						</span>
-						<p>Nickname</p>
-					</li>
-					<li>
-						<span>
-							<strong>2</strong>nd
-						</span>
-						<p>Nickname</p>
-					</li>
-					<li>
-						<span>
-							<strong>3</strong>rd
-						</span>
-						<p>Nickname</p>
-					</li>
-					<li>
-						<span>
-							<strong>4</strong>th
-						</span>
-						<p>Nickname</p>
-					</li>
-					<li>
-						<span>
-							<strong>5</strong>th
-						</span>
-						<p>Nickname</p>
-					</li>
+					{rankingList.length <= 0 ? (
+						<p>랭킹 정보가 없습니다.</p>
+					) : (
+						rankingList.map((v, i) => {
+							return (
+								<li key={i}>
+									<span>
+										<strong>{i + 1}</strong>st
+									</span>
+									<p>{v.nickname}</p>
+								</li>
+							);
+						})
+					)}
 				</RankItemGroup>
 			</div>
 		</Ranking>
@@ -190,7 +176,7 @@ const RankItemGroup = styled.ul`
 	}
 `;
 
-const PostsArea = ({loggedIn}) => {
+const PostsArea = ({ loggedIn }) => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const datas = useSelector((state) => state.haedal.list);
@@ -202,6 +188,7 @@ const PostsArea = ({loggedIn}) => {
 	useEffect(() => {
 		setPosts(datas);
 	}, [datas]);
+
 	const scores = [
 		{ emoji: "😡", text: "최악" },
 		{ emoji: "☹️", text: "나쁨" },
@@ -226,10 +213,15 @@ const PostsArea = ({loggedIn}) => {
 										<div>
 											<div className="score_area">
 												<span>
-													행복지수 <strong>{Object.values(scores[v.happypoint - 1])[1]}</strong>
+													행복지수{" "}
+													<strong>
+														{Object.values(scores[v.happypoint - 1])[1]}
+													</strong>
 												</span>
 												<br />
-												<strong>{Object.values(scores[v.happypoint - 1])[0]}</strong>
+												<strong>
+													{Object.values(scores[v.happypoint - 1])[0]}
+												</strong>
 											</div>
 											<div className="text_area">
 												<span>
@@ -246,13 +238,15 @@ const PostsArea = ({loggedIn}) => {
 					</PostsGroup>
 				</div>
 			</PostsWrap>
-			<RegisterButton onClick={() => {
-				if(!loggedIn){
-					window.alert('로그인 후 게시글 작성 가능합니다.');
-					return navigate('/signin');
-				}
-				navigate("/write");
-			}}>
+			<RegisterButton
+				onClick={() => {
+					if (!loggedIn) {
+						window.alert("로그인 후 게시글 작성 가능합니다.");
+						return navigate("/signin");
+					}
+					navigate("/write");
+				}}
+			>
 				<span>새글 작성하기</span>
 			</RegisterButton>
 		</>

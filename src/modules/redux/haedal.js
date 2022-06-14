@@ -99,8 +99,7 @@ export const loadPostAxios = (post_id) => { // 조회할 게시글 불러오기
 			res => { 
 				const post_data = res.data;
 				//console.log(post_data)
-				dispatch(loadPost(post_data))
-			
+				dispatch(loadPost(post_data));
 			}
 		).catch(
 			err => {
