@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate, useParams} from "react-router-dom";
 import{useSelector, useDispatch, } from "react-redux";
+import {createHappy, loadContent} from "../modules/redux/haedal";
+
 
 
 import img_1 from "../images/img_1.jpeg";
