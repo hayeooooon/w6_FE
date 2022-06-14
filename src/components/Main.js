@@ -187,6 +187,7 @@ const PostsArea = ({ loggedIn }) => {
 
 	useEffect(() => {
 		setPosts(datas);
+		console.log(posts,'posts')
 	}, [datas]);
 
 	const scores = [
@@ -212,7 +213,7 @@ const PostsArea = ({ loggedIn }) => {
 										></span>
 										<div>
 											<div className="score_area">
-												<span>
+												{/* <span>
 													행복지수{" "}
 													<strong>
 														{Object.values(scores[v.happypoint - 1])[1]}
@@ -221,7 +222,7 @@ const PostsArea = ({ loggedIn }) => {
 												<br />
 												<strong>
 													{Object.values(scores[v.happypoint - 1])[0]}
-												</strong>
+												</strong> */}
 											</div>
 											<div className="text_area">
 												<span>

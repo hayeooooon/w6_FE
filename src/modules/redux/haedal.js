@@ -58,6 +58,7 @@ export const loadPostsListAxios = () => { // 전체 게시글 리스트 불러�
 	return async (dispatch) => {
 		await apis.postList().then((res) => {
 				const post_list = res.data;
+				console.log(res.data)
 				dispatch(loadPostsList(post_list));
 				
 			})
@@ -71,6 +72,7 @@ export const loadPostAxios = (post_id) => { // 조회할 게시글 불러오기
 	return async (dispatch) => {
 		await apis.postdetail(post_id).then(
 			res => { 
+				console.log(res, 'res??')
 				const post_data = res.data;
 				//console.log(post_data)
 				dispatch(loadPost(post_data));
@@ -103,9 +105,9 @@ export const createPost = (post_data) => {
 	}
 }
 
-export const updateHappyAxios = (post_id) => { // 게시글 수정
+export const updateHappyAxios = (post_id, formData) => { // 게시글 수정
 	return async () => {
-		await apis.updatePost(post_id).then(
+		await apis.updatePost(post_id, formData).then(
 			res => {
 				console.log(res, '업데이트 완료!');
 			}
