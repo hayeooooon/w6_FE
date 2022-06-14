@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+<<<<<<< HEAD
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+=======
+import { Link, useNavigate, useParams} from "react-router-dom";
+import{useSelector, useDispatch, } from "react-redux";
+import {createHappy, loadContent} from "../modules/redux/haedal";
+
+
+>>>>>>> c502eb866e59f69f3dfcbc42a9caf31e4d77c708
 
 import img_1 from "../images/img_1.jpeg";
 import img_2 from "../images/img_2.jpeg";

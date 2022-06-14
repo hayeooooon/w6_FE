@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import thunk from "redux-thunk"
-import haedal from './modules/haedal';
-import comment from './modules/comment';
+import haedal from './modules/redux/haedal';
+import comment from './modules/redux/comment';
 import {createBrowserHistory} from"history";
 
 export const history = createBrowserHistory();
