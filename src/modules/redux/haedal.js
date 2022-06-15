@@ -94,7 +94,6 @@ export const loadPostAxios = (post_id) => { // 조회할 게시글 불러오기
 
 export const createPost = (post_data) => {
 	return async () => {
-		console.log(post_data)
 		const config = {
 			headers: {
 				'Content-Type': 'multipart/form-data'
@@ -112,9 +111,15 @@ export const createPost = (post_data) => {
 	}
 }
 
-export const updateHappyAxios = (post_id, formData) => { // 게시글 수정
+export const updateHappyAxios = (post_id, post_data) => { // 게시글 수정
 	return async () => {
-		await apis.updatePost(post_id, formData).then(
+		console.log(post_data)
+		const config = {
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+		}
+		await apis.updatePost(post_id, post_data, config).then(
 			res => {
 				console.log(res, '업데이트 완료!');
 			}
@@ -128,15 +133,15 @@ export const updateHappyAxios = (post_id, formData) => { // 게시글 수정
 //todo: 게시글 삭제*****
 export const deleteHappyAxios = (post_id) => {
 	return async () => {
-		await apis.deletePost(post_id).then(
-			res => {
-				console.log(res,'삭제 완료');
-			}
-		).catch(
-			err => {
-				console.log(err);
-			}
-		)
+		// await apis.deletePost(post_id).then(
+		// 	res => {
+		// 		console.log(res,'삭제 완료');
+		// 	}
+		// ).catch(
+		// 	err => {
+		// 		console.log(err);
+		// 	}
+		// )
 	}
 }
 

@@ -5,6 +5,7 @@ import Button from "./Button";
 import img_3 from "../images/img_3.jpeg";
 
 import { loadPostAxios, deleteHappyAxios } from "../modules/redux/haedal";
+import { createCommentAxios } from "../modules/redux/comment";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -13,6 +14,7 @@ const Detail = ({ loggedIn, userInfo }) => {
 	const dispatch = useDispatch(null);
 	const param = useParams();
 	const navigate = useNavigate();
+	const [comment, setComment] = useState();
 	const [post, setPost] = useState();
 
 	//todo: 메인-디테일 연결(postid&post)
@@ -23,7 +25,6 @@ const Detail = ({ loggedIn, userInfo }) => {
 	useEffect(() => {
 		dispatch(loadPostAxios(param.postId));
 	}, []);
-	
 
 	//todo: 게시물 삭제*****
 	const deletePost = dispatch(deleteHappyAxios(param.postId));
@@ -86,12 +87,15 @@ const Detail = ({ loggedIn, userInfo }) => {
 										<div>
 											<textarea
 												type="text"
+												onChange={(e)=>setComment(e.target.value)}
 												placeholder="자유롭게 의견을 작성해주세요."
 											></textarea>
 										</div>
 									</InputBox>
 									<div className="btn_box">
-										<Button st="primary">작성하기</Button>
+										<Button st="primary" onClick={(e)=>{
+											if(comment.trim().length > 0) dispatch(createCommentAxios(param.postId, comment));
+										}}>작성하기</Button>
 									</div>
 								</InputArea>
 							</div>
