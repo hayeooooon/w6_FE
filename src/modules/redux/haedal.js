@@ -53,7 +53,7 @@ export const loadPost = (post_data) => {
 	return { type: LOAD_SINGLE, post_data}
 }
 
-//todo: 게시물삭제(액션생성함수)
+//todo: 게시물삭제(액션생성함수)*****
 export const deletePosts = (delete_data) => {
 	return { type : DELETECONTENT, delete_data}
 }
