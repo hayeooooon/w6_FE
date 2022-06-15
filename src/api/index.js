@@ -25,5 +25,7 @@ export const apis = {
 
 	// comments
 	createComment: (postId, comment) => api.post(`/api/comment/${postId}`, comment),
+	updateComment: (commentId, comment) => api.put(`/api/comment/${commentId}`, comment),
+	deleteComment: (commentId) => api.delete(`/api/comment/${commentId}`)
 };
 

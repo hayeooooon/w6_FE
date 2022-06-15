@@ -58,10 +58,10 @@ const Mypage = () => {
 								{mypage?.posts.map((v, i) => {
 									return (
 										<PostItem key={i}>
-											<Link to={`/detail/${postId}`} className="inner">
+											<Link to={`/detail/${v.postId}`} className="inner">
 												<span
 													className="img_box"
-													style={{ backgroundImage: `url(${v.img})` }}
+													style={{ backgroundImage: `url(${v.imgUrl})` }}
 												></span>
 												<div>
 													<div className="score_area">

@@ -119,6 +119,10 @@ textarea{
 textarea:focus{
   outline: none;
 }
+.comment_view textarea{
+  min-height: 60px;
+  padding: 10px;
+}
 dl, dl dt, dl dd{
   margin: 0;
 }
