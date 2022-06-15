@@ -14,6 +14,7 @@ const Header = ({ loggedIn, setLoggedIn, userInfo, setUserInfo}) => {
 		setLoggedIn(false);
 		setUserInfo({});
 		dispatch(signOutAxios());
+		navigate('/');
 	};
 	const header_btns = loggedIn ? (
 		<>

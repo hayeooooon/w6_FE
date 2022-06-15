@@ -5,14 +5,15 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import stroe from "./modules/configStore";
-import { createBrowserHistory } from 'history';
-import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
+import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
+import { createBrowserHistory } from "history";
 
-let customHistory = createBrowserHistory();
+
+const history = createBrowserHistory({ window });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-	<HistoryRouter history={customHistory}>
+	<HistoryRouter history={history}>
 		<Provider store={stroe}>
 			<App />
 		</Provider>

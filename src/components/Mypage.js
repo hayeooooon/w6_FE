@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import img_1 from "../images/img_1.jpeg";
@@ -9,7 +9,7 @@ import img_3 from "../images/img_3.jpeg";
 import img_4 from "../images/img_4.jpeg";
 import { loadMypageAxios } from "../modules/redux/user";
 
-const Mypage = () => {
+const Mypage = ({loggedIn}) => {
 	const [postId] = useState(0); // 임시 data
 	const dispatch = useDispatch();
 	const datas = useSelector((state) => state.user.mypage);
@@ -29,6 +29,10 @@ const Mypage = () => {
 		setMypage(datas.length > 0 ? datas[0] : null);
 	}, [datas]);
 
+	if (!localStorage.getItem('token')) {
+		window.alert('마이페이지는 로그인 후 이용 가능합니다.');
+		return <Navigate to="/" replace/>
+	}
 	return (
 		<div className="content">
 			<div className="set_inner">
@@ -77,9 +81,9 @@ const Mypage = () => {
 														</strong>
 													</div>
 													<div className="text_area">
-														<span>
+														{/* <span>
 															Happy Runner <strong>{mypage.nickname}</strong>
-														</span>
+														</span> */}
 														<p>{v.content}</p>
 													</div>
 												</div>
