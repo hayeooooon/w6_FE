@@ -5,11 +5,16 @@ import { apis } from "../../api/index";
 const CREATE = "haedal/CREATE";
 const LOAD = "haedal/LOAD";
 const LOADCONTENT = "haedal/LOADCONTENT";
-//const  LOADPOINT = "haedal/LOADPOINT"
 const DELETECONTENT = "haedal/DELETE";
 const UPDATE = "haedal/UPDATE";
 const LOAD_LIST = "haedal/LOAD_LIST";
 const LOAD_SINGLE = "haedal/LOAD_SINGLE";
+
+//comment
+const CREATE_COMMENT = "comment/CREATE";
+const DELETE_COMMENT = "comment/DELETE";
+const UPDATE_COMMENT = "comment/UPDATE";
+
 
 const initialState = {
 	list: [
@@ -58,10 +63,17 @@ export const deletePosts = (delete_data) => {
 	return { type : DELETECONTENT, delete_data}
 }
 
-export const createComment = (comment) => {
-	return {type: CREATE, comment};
+export const createComment = (new_comment) => {
+	return {type: CREATE_COMMENT, new_comment};
 }
 
+export const deleteComment = (new_comments) => {
+	return {type: DELETE_COMMENT, new_comments}
+}
+
+export const updateComment = (new_comments) => {
+	return {type: UPDATE_COMMENT, new_comments}
+}
 
 // Middlewares
 export const loadPostsListAxios = () => { // 전체 게시글 리스트 불러오기
@@ -135,26 +147,24 @@ export const updateHappyAxios = (post_id, post_data) => { // 게시글 수정
 //todo: 게시글 삭제*****
 export const deleteHappyAxios = (post_id) => {
 	return async () => {
-		await apis.deletePost(post_id).then(
-			res => {
-				console.log(res,'삭제 완료');
-			}
-		).catch(
-			err => {
-				console.log(err);
-			}
-		)
+		// await apis.deletePost(post_id).then(
+		// 	res => {
+		// 		console.log(res,'삭제 완료');
+		// 	}
+		// ).catch(
+		// 	err => {
+		// 		console.log(err);
+		// 	}
+		// )
 	}
 }
-
-//Middlewares
 export const createCommentAxios = (post_id, comment) => {
 	return async (dispatch, useState) => {
 			apis.createComment(post_id, {comment}).then(
 					res => {
-						const _comments = useState().post;
-						_comments.push()
-							console.log(res);
+						console.log(res);
+						const new_comment = {comment: comment, commentId: res.data.commentId, nickname: res.data.nickname, userId: res.data.userId};
+						dispatch(createComment(new_comment));
 					}
 			).catch(
 					err => {
@@ -163,6 +173,47 @@ export const createCommentAxios = (post_id, comment) => {
 			)
 	}
 }
+
+	export const updateCommentAxios = (comment_id, comment) => {
+		return async (dispatch, useState) => {
+			apis.updateComment(comment_id, {comment}).then(
+				res => {
+					console.log(res, 'updated comment res');
+					const _comment = useState().haedal.post[0].comments;
+					const new_comments = _comment.map(v=>{
+						if(v.commentId === comment_id){
+							v.comment = comment;
+							return v;
+						}
+						return v;
+					});
+					dispatch(updateComment(new_comments));
+				}
+			).catch(
+				err => {
+					console.error(err, 'updated comment error');
+				}
+			)
+		}
+	}
+
+	export const deleteCommentAxios = (comment_id) => {
+		console.log(comment_id)
+		return async (dispatch, useState) => {
+			apis.deleteComment(comment_id).then(
+				res => {
+					console.log(res);
+					const _comment = useState().haedal.post[0].comments;
+					const new_comments = _comment.filter(v=>v.commentId !== comment_id);
+					dispatch(deleteComment(new_comments));
+				}
+			).catch(
+				err => {
+					console.error(err);
+				}
+			)
+		}
+	}
 
 
 
@@ -199,6 +250,27 @@ export default function reducer(state = initialState, action = {}) {
 				return parseInt(action.delete_data) !== action.postid;
 			})
 			return {list:state.list, post : []}
+		}
+
+		// 코멘트 추가
+		case "comment/CREATE": {
+			const new_comment = action.new_comment;
+			const new_comments = [...state.post[0].comments];
+			new_comments.push(new_comment);
+			// console.log(action.new_comment, new_comments)
+			return {list: state.list, post: [{...state.post, comments: new_comments}]};
+		}
+
+		// 코멘트 삭제 반영
+		case "comment/DELETE": {
+			const new_comments = action.new_comments;
+			return {list: state.list, post: [{...state.post, comments: new_comments}]};
+		}
+		
+		// 코멘트 업데이트 반영
+		case "comment/UPDATE": {
+			const new_comments = action.new_comments;
+			return {list: state.list, post: [{...state.post, comments: new_comments}]};
 		}
 
 
