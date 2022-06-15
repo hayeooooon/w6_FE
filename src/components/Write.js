@@ -171,6 +171,7 @@ const Write = ({ page, loggedIn }) => {
 								<Button width="m" st="primary" onClick={checkValidation}>
 									등록하기
 								</Button>
+									
 							</>
 						)}
 					</div>
