@@ -1,29 +1,45 @@
-import React from "react";
-
+import { apis } from "../../api/index";
 
 
 //Action
-const ADD_COMMENT = "comment/ADD_COMMENT";
-const initialState = {list: [{id: "", comment: ""}]}
+const CREATE = "comment/CREATE";
+
+
+const initialState = {
+    comments: [],
+    comment: []
+}
 
 //Action creators
-export const createComment = (data) => {
-    //console.log(data)
-    return {type: ADD_COMMENT, data};
+export const createComment = (comment) => {
+    return {type: CREATE, comment};
 }
-//Middleware
+
+//Middlewares
+export const createCommentAxios = (post_id, comment) => {
+    return async (dispatch) => {
+        apis.createComment(post_id, {comment}).then(
+            res => {
+                apis.postdetail()
+                console.log(res);
+            }
+        ).catch(
+            err => {
+                console.error(err);
+            }
+        )
+    }
+}
 
 
 
 //Reducer
 export default function reducer(state = initialState, action ={}) {
     switch(action.type) {
-        //todo: 댓글 업로드
-        case "comment/ADD_COMMENT": {
-            const new_comment= [...state.list, action.data]
-            return {...state, list: new_comment};
-            
-    }
+        case "comment/CREATE": {
+
+            return state;
+        }
   
             default: return state;
         }
