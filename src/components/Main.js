@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { apis } from "../api/index";
@@ -12,12 +12,12 @@ import { loadPostsListAxios } from "../modules/redux/haedal";
 import { getUserInfoAxios } from "../modules/redux/user";
 
 const Main = ({ loggedIn, setLoggedIn, userInfo, setUserInfo }) => {
-	
 	return (
 		<div className="content">
 			<TopArea>
 				<div className="set_inner">
 					<h2>해피 달리기, 해달</h2>
+					<AnimationText>HAPPY RUNNING</AnimationText>
 					<p>
 						일상을 더욱 다채롭고 행복하게 만드는 일, <span>해달</span>에서 함께
 						할 수 있어요!
@@ -32,10 +32,46 @@ const Main = ({ loggedIn, setLoggedIn, userInfo, setUserInfo }) => {
 	);
 };
 
+const gradient = keyframes`
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+`;
+const AnimationText = styled.h4`
+	position: absolute;
+	z-index: 1;
+	-webkit-background-clip: text;
+	color: transparent;
+	left: 0;
+	right: 0;
+	top: 50%;
+	font-size: 12vw;
+	background-image: linear-gradient(-45deg, #ffc1c8, #fff67c, #cfe98a, #ffd972);
+	background-size: 400% 400%;
+	animation: ${gradient} 10s ease infinite;
+	line-height: .9;
+	font-weight: 900;
+	letter-spacing: 0.05em;
+	transform: translateY(-50%);
+	z-index: -1;
+	opacity: .4;
+	text-align: center;
+`;
+
 const TopArea = styled.div`
-	padding: 8% 0 5%;
+	padding: 14% 0 10%;
 	font-size: 3rem;
 	text-align: center;
+	.set_inner{
+		position: relative;
+	}
+
 	p {
 		font-size: 2rem;
 		margin-top: 12px;
@@ -185,7 +221,7 @@ const PostsArea = ({ loggedIn }) => {
 
 	useEffect(() => {
 		setPosts(datas);
-		console.log(posts,'posts')
+		console.log(posts, "posts");
 	}, [datas]);
 
 	const scores = [
@@ -199,7 +235,7 @@ const PostsArea = ({ loggedIn }) => {
 		<>
 			<PostsWrap>
 				<div className="set_inner">
-					<SectionTitle>행복 러너들의 이야기</SectionTitle>
+					<SectionTitle>해피 러너들의 이야기</SectionTitle>
 					<PostsGroup>
 						{posts.map((v, i) => {
 							return (
@@ -239,7 +275,7 @@ const PostsArea = ({ loggedIn }) => {
 			</PostsWrap>
 			<RegisterButton
 				onClick={() => {
-					if (!loggedIn) {
+					if (!localStorage.getItem("token")) {
 						window.alert("로그인 후 게시글 작성 가능합니다.");
 						return navigate("/signin");
 					}
@@ -291,7 +327,7 @@ const PostItem = styled.li`
 				top: 0;
 				bottom: 0;
 				content: "";
-				background-color: rgba(0, 0, 0, 0.4);
+				background-color: rgba(0, 0, 0, 0.3);
 				z-index: 1;
 				transition: ease-out 0.4s;
 			}
@@ -306,7 +342,7 @@ const PostItem = styled.li`
 			left: 0;
 			bottom: 0;
 			top: 0;
-			padding: 40px;
+			padding: 40px 30px;
 			z-index: 2;
 			div {
 				text-align: center;
@@ -350,13 +386,12 @@ const PostItem = styled.li`
 	p {
 		font-size: 2rem;
 		font-weight: 500;
-		line-height: 1.7;
+		line-height: 1.5;
 		color: #fff;
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
-		max-height: 3.4em;
-		line-height: 1.7;
+		max-height: 3em;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
@@ -403,6 +438,7 @@ const RegisterButton = styled.button`
 	height: 50px;
 	border-radius: 50%;
 	background-color: #f2b43f;
+	z-index: 2;
 	cursor: pointer;
 	&:before {
 		left: 50%;

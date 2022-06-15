@@ -1,4 +1,3 @@
-import axios from "axios";
 import { apis } from "../../api/index";
 
 //Action Type
@@ -6,7 +5,6 @@ const CREATE = "haedal/CREATE";
 const LOAD = "haedal/LOAD";
 const LOADCONTENT = "haedal/LOADCONTENT";
 const DELETECONTENT = "haedal/DELETE";
-const UPDATE = "haedal/UPDATE";
 const LOAD_LIST = "haedal/LOAD_LIST";
 const LOAD_SINGLE = "haedal/LOAD_SINGLE";
 
@@ -75,6 +73,7 @@ export const updateComment = (new_comments) => {
 	return {type: UPDATE_COMMENT, new_comments}
 }
 
+
 // Middlewares
 export const loadPostsListAxios = () => { // 전체 게시글 리스트 불러오기
 	return async (dispatch) => {
@@ -113,7 +112,6 @@ export const createPost = (post_data) => {
 				'Content-Type': 'multipart/form-data'
 			}
 		}
-		console.log(post_data, config);
 		await apis.createPost(post_data, config).then(
 			res => {
 				console.log(res, 'post create response')
@@ -126,7 +124,7 @@ export const createPost = (post_data) => {
 	}
 }
 
-export const updateHappyAxios = (post_id, post_data) => { // 게시글 수정
+export const updatePostAxios = (post_id, post_data) => { // 게시글 수정
 	return async () => {
 		const config = {
 			headers: {
@@ -136,6 +134,7 @@ export const updateHappyAxios = (post_id, post_data) => { // 게시글 수정
 		await apis.updatePost(post_id, post_data, config).then(
 			res => {
 				console.log(res, 'post update response')
+				window.location.href = `/detail/${post_id}`;
 			}
 		).catch(
 			err => {
@@ -147,15 +146,16 @@ export const updateHappyAxios = (post_id, post_data) => { // 게시글 수정
 //todo: 게시글 삭제*****
 export const deleteHappyAxios = (post_id) => {
 	return async () => {
-		// await apis.deletePost(post_id).then(
-		// 	res => {
-		// 		console.log(res,'삭제 완료');
-		// 	}
-		// ).catch(
-		// 	err => {
-		// 		console.log(err);
-		// 	}
-		// )
+		await apis.deletePost(post_id).then(
+			res => {
+				console.log(res,'삭제 완료');
+				window.location.href = '/';
+			}
+		).catch(
+			err => {
+				console.log(err);
+			}
+		)
 	}
 }
 export const createCommentAxios = (post_id, comment) => {
@@ -163,7 +163,7 @@ export const createCommentAxios = (post_id, comment) => {
 			apis.createComment(post_id, {comment}).then(
 					res => {
 						console.log(res);
-						const new_comment = {comment: comment, commentId: res.data.commentId, nickname: res.data.nickname, userId: res.data.userId};
+						const new_comment = {comment: comment, commentId: res.data.commentId, nickname: res.data.nickname, userId: res.data.userId, edit: false};
 						dispatch(createComment(new_comment));
 					}
 			).catch(
@@ -215,6 +215,8 @@ export const createCommentAxios = (post_id, comment) => {
 		}
 	}
 
+	
+
 
 
 
@@ -244,34 +246,31 @@ export default function reducer(state = initialState, action = {}) {
 			return { list: state.list, post: post_data};
 		}
 
-		//todo: 게시글 삭제(리듀서)*****
-		case "haedal/DELETECONTENT": {
-			const post_delete = state.list.filter((v) => {
-				return parseInt(action.delete_data) !== action.postid;
-			})
-			return {list:state.list, post : []}
-		}
-
 		// 코멘트 추가
 		case "comment/CREATE": {
+			console.log(state.post[0])
 			const new_comment = action.new_comment;
 			const new_comments = [...state.post[0].comments];
 			new_comments.push(new_comment);
-			// console.log(action.new_comment, new_comments)
-			return {list: state.list, post: [{...state.post, comments: new_comments}]};
+
+			const new_post = [{...state.post[0]}];
+			new_post[0].comments = new_comments;
+			return {list: state.list, post: [{...new_post[0]}]};
 		}
 
 		// 코멘트 삭제 반영
 		case "comment/DELETE": {
 			const new_comments = action.new_comments;
-			return {list: state.list, post: [{...state.post, comments: new_comments}]};
+			return {list: state.list, post: [{...state.post[0], comments: new_comments}]};
 		}
 		
 		// 코멘트 업데이트 반영
 		case "comment/UPDATE": {
 			const new_comments = action.new_comments;
-			return {list: state.list, post: [{...state.post, comments: new_comments}]};
+			return {list: state.list, post: [{...state.post[0], comments: new_comments}]};
 		}
+
+
 
 
 
