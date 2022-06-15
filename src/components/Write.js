@@ -162,6 +162,7 @@ const Write = ({ page }) => {
 								<Button width="m" st="primary" onClick={checkValidation}>
 									등록하기
 								</Button>
+									
 							</>
 						)}
 						{/*  수정모드일 경우 수정하기로 텍스트 변경 */}

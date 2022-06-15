@@ -85,7 +85,12 @@ const Detail = ({ loggedIn, userInfo }) => {
 							className="btn_area"
 							style={{ textAlign: "right", marginTop: "60px" }}
 						>
-								<Button onClick ={(e)=>{dispatch(deleteHappyAxios(param.postId))}}>삭제</Button>
+								<Button onClick ={(e)=>{
+									dispatch(deleteHappyAxios(param.postId))
+									navigate("/")
+									window.location.reload()
+									}}>
+									삭제</Button>
 							<Link to={`/edit/${param.postId}`} className="btn primary">
 								수정
 							</Link>

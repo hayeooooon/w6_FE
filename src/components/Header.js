@@ -21,8 +21,9 @@ const Header = ({ loggedIn, setLoggedIn, userInfo, setUserInfo}) => {
 			<span className="fw_400">Happy Runner </span>{userInfo.nickname}
 			</Link>
 			<Button st="text" onClick={logout}>
+			<Link to="/signin">
 				로그아웃
-			</Button>
+			</Link></Button>
 		</>
 	) : (
 		<>

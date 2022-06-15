@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate, Link } from 'react-router-dom';
 import { signInAxios, signUpAxios } from "../modules/redux/user";
 
 import Button from "./Button";
@@ -153,8 +153,9 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 							<Button width="m" onClick={()=>{navigate('/')}}>취소</Button>
 							{type === "signup" ? (
 								<Button width="m" st="primary" onClick={signUp}>
+									<Link to="/signin">
 									가입하기
-								</Button>
+								</Link></Button>
 							) : (
 								<Button width="m" st="primary" onClick={signIn}>
 									로그인
