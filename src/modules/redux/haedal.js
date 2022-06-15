@@ -53,7 +53,7 @@ export const loadPost = (post_data) => {
 	return { type: LOAD_SINGLE, post_data}
 }
 
-//todo: 게시물삭제(액션생성함수)
+//todo: 게시물삭제(액션생성함수)*****
 export const deletePosts = (delete_data) => {
 	return { type : DELETECONTENT, delete_data}
 }
@@ -128,7 +128,7 @@ export const updateHappyAxios = (post_id, formData) => { // 게시글 수정
 //todo: 게시글 삭제*****
 export const deleteHappyAxios = (post_id) => {
 	return async () => {
-		await apis.deletePosts(post_id).then(
+		await apis.deletePost(post_id).then(
 			res => {
 				console.log(res,'삭제 완료');
 			}

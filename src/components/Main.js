@@ -216,7 +216,7 @@ const PostsArea = ({ loggedIn }) => {
 												{/* <span>
 													행복지수{" "}
 													<strong>
-														{/* {Object.values(scores[v.happypoint - 1])[1]} */}
+														{Object.values(scores[v.happypoint - 1])[1]}
 													</strong>
 												</span>
 												<br />

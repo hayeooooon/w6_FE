@@ -23,10 +23,11 @@ const Detail = ({ loggedIn, userInfo }) => {
 	useEffect(() => {
 		dispatch(loadPostAxios(param.postId));
 	}, []);
-	console.log(thispost[0]);
+	
 
 	//todo: 게시물 삭제*****
 	const deletePost = dispatch(deleteHappyAxios(param.postId));
+	
 
 	return (
 		<div className="content">
@@ -64,7 +65,7 @@ const Detail = ({ loggedIn, userInfo }) => {
 								className="btn_area"
 								style={{ textAlign: "right", marginTop: "60px" }}
 							>
-								<Button>삭제</Button>
+								<Button onClick ={deletePost}>삭제</Button>
 								<Link to={`/edit/${param.postId}`} className="btn primary">
 									수정
 								</Link>
