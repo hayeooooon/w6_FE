@@ -58,19 +58,22 @@ export const deletePosts = (delete_data) => {
 	return { type : DELETECONTENT, delete_data}
 }
 
+export const createComment = (comment) => {
+	return {type: CREATE, comment};
+}
 
 
 // Middlewares
 export const loadPostsListAxios = () => { // 전체 게시글 리스트 불러오기
 	return async (dispatch) => {
 		await apis.postList().then((res) => {
+				console.log(res, 'main page posts list response')
 				const post_list = res.data;
-				console.log(res.data)
 				dispatch(loadPostsList(post_list));
 				
 			})
 			.catch((err) => {
-				console.error(err);
+				console.error(err, 'main page posts list error');
 			});
 	};
 };
@@ -79,14 +82,13 @@ export const loadPostAxios = (post_id) => { // 조회할 게시글 불러오기
 	return async (dispatch) => {
 		await apis.postdetail(post_id).then(
 			res => { 
-				console.log(res, 'res??')
+				console.log(res, 'detail page response')
 				const post_data = res.data;
-				//console.log(post_data)
 				dispatch(loadPost(post_data));
 			}
 		).catch(
 			err => {
-				console.log(err);
+				console.log(err, 'detail page error');
 			}
 		)
 	}
@@ -99,13 +101,14 @@ export const createPost = (post_data) => {
 				'Content-Type': 'multipart/form-data'
 			}
 		}
+		console.log(post_data, config);
 		await apis.createPost(post_data, config).then(
 			res => {
-				console.log(res);
+				console.log(res, 'post create response')
 			}
 		).catch(
 			err => {
-				console.log(err);
+				console.error(err, 'post create error');
 			}
 		)
 	}
@@ -113,7 +116,6 @@ export const createPost = (post_data) => {
 
 export const updateHappyAxios = (post_id, post_data) => { // 게시글 수정
 	return async () => {
-		console.log(post_data)
 		const config = {
 			headers: {
 				'Content-Type': 'multipart/form-data'
@@ -121,11 +123,11 @@ export const updateHappyAxios = (post_id, post_data) => { // 게시글 수정
 		}
 		await apis.updatePost(post_id, post_data, config).then(
 			res => {
-				console.log(res, '업데이트 완료!');
+				console.log(res, 'post update response')
 			}
 		).catch(
 			err => {
-				console.log(err);
+				console.error(err, 'post update error');
 			}
 		)
 	}
@@ -142,6 +144,23 @@ export const deleteHappyAxios = (post_id) => {
 		// 		console.log(err);
 		// 	}
 		// )
+	}
+}
+
+//Middlewares
+export const createCommentAxios = (post_id, comment) => {
+	return async (dispatch, useState) => {
+			apis.createComment(post_id, {comment}).then(
+					res => {
+						const _comments = useState().post;
+						_comments.push()
+							console.log(res);
+					}
+			).catch(
+					err => {
+							console.error(err);
+					}
+			)
 	}
 }
 

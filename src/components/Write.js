@@ -76,9 +76,10 @@ const Write = ({ page }) => {
 			const post = post_data[0];
 			setScore(post.happypoint);
 			setContent(post.content);
-			setFilename(post.img);
+			setFilename(post.imgFileName);
 		}
 	}, [post_data]);
+	console.log(post_data)
 
 	return (
 		<div className="content">
