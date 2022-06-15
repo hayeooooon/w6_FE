@@ -66,7 +66,7 @@ const Detail = ({ loggedIn, userInfo }) => {
 								className="btn_area"
 								style={{ textAlign: "right", marginTop: "60px" }}
 							>
-								<Button onClick ={deletePost}>삭제</Button>
+								<Button onClick ={()=>deletePost}>삭제</Button>
 								<Link to={`/edit/${param.postId}`} className="btn primary">
 									수정
 								</Link>

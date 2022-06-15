@@ -133,15 +133,15 @@ export const updateHappyAxios = (post_id, post_data) => { // 게시글 수정
 //todo: 게시글 삭제*****
 export const deleteHappyAxios = (post_id) => {
 	return async () => {
-		// await apis.deletePost(post_id).then(
-		// 	res => {
-		// 		console.log(res,'삭제 완료');
-		// 	}
-		// ).catch(
-		// 	err => {
-		// 		console.log(err);
-		// 	}
-		// )
+		await apis.deletePost(post_id).then(
+			res => {
+				console.log(res,'삭제 완료');
+			}
+		).catch(
+			err => {
+				console.log(err);
+			}
+		)
 	}
 }
 
