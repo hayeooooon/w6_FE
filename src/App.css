@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;500;700&family=Noto+Sans+KR:wght@100;300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;500;700&family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
 
 html{
   font-size: 62.5%;
@@ -28,6 +28,7 @@ h1, h2, h3, h4, h5, h6, p{
 }
 ul{
   padding: 0;
+  margin: 0;
 }
 li{
   list-style: none;
@@ -118,10 +119,6 @@ textarea{
 }
 textarea:focus{
   outline: none;
-}
-.comment_view textarea{
-  min-height: 60px;
-  padding: 10px;
 }
 dl, dl dt, dl dd{
   margin: 0;

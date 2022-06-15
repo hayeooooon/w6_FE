@@ -2,17 +2,15 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import {
-	createHappy,
 	loadPostAxios,
-	updateHappyAxios,
+	updatePostAxios,
 	createPost,
 } from "../modules/redux/haedal";
-import { useNavigate, Link, Navigate, useParams } from "react-router-dom";
-import axios from "axios";
+import { useNavigate, Navigate, useParams } from "react-router-dom";
 
 import Button from "./Button";
 
-const Write = ({ page }) => {
+const Write = ({ page, loggedIn }) => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch(null);
 	const param = useParams();
@@ -29,18 +27,22 @@ const Write = ({ page }) => {
 	const [clicked, setClicked] = useState();
 	const inputs = [score, filename, content];
 	const refs = [scoreInput, fileInput, contentInput];
-	const [formdata, setFormdata] = useState();
-	let uploadFile = '';
+	const preview = useRef();
 
 	//todo: 이미지 업로드
 	const uploadImg = (e) => {
 		e.preventDefault();
-		if (e.target.files) {
-			setFile(e.target.files[0])
+		if (e.target.files[0]) {
+			setFile(e.target.files[0]);
 			setFilename(e.target.files[0].name);
+			const reader = new FileReader();
+			reader.onload = function (event) {
+				preview.current.setAttribute("src", event.target.result);
+			};
+			reader.readAsDataURL(e.target.files[0]);
 		}
 	};
-  
+
 	//todo: 게시글내용입력
 	const checkValidation = () => {
 		setClicked(true);
@@ -55,8 +57,8 @@ const Write = ({ page }) => {
 				formData.append("happypoint", score);
 				formData.append("content", content);
 				if (page === "edit") {
-					dispatch(updateHappyAxios(param.postId, formData))
-				}else {
+					dispatch(updatePostAxios(param.postId, formData));
+				} else {
 					dispatch(createPost(formData));
 				}
 				setClicked(false);
@@ -64,7 +66,6 @@ const Write = ({ page }) => {
 			}
 		}
 	};
-	console.log(file ? file : filename, score, content)
 
 	useEffect(() => {
 		if (page === "edit") {
@@ -77,10 +78,14 @@ const Write = ({ page }) => {
 			setScore(post.happypoint);
 			setContent(post.content);
 			setFilename(post.imgFileName);
+			preview.current.setAttribute("src", post.img);
 		}
 	}, [post_data]);
-	console.log(post_data)
 
+	if (!localStorage.getItem('token')) {
+		window.alert("게시글 작성 및 편집은 로그인 후 이용 가능합니다.");
+		return <Navigate to="/" replace />;
+	}
 	return (
 		<div className="content">
 			<section>
@@ -125,6 +130,10 @@ const Write = ({ page }) => {
 							{clicked && (filename === "" || filename === undefined) && (
 								<p className="txt_err">오늘의 사진을 첨부해주세요!</p>
 							)}
+							<InputLabel style={{marginTop: '30px'}}>PREVIEW</InputLabel>
+							<PreviewArea className={preview.current?.value ? 'has_photo' : ''}>
+								<img src="" ref={preview} />
+							</PreviewArea>
 						</InputArea>
 						<InputArea className="input_area textarea">
 							<InputLabel>STORY</InputLabel>
@@ -164,7 +173,6 @@ const Write = ({ page }) => {
 								</Button>
 							</>
 						)}
-						{/*  수정모드일 경우 수정하기로 텍스트 변경 */}
 					</div>
 				</div>
 			</section>
@@ -271,6 +279,36 @@ const Attachment = styled.div`
 	}
 	button {
 		pointer-events: none;
+	}
+`;
+const PreviewArea = styled.div`
+	position: relative;
+	width: 70%;
+	height: 0;
+	padding-bottom: 35%;
+	/* margin: 0 auto; */
+	overflow: hidden;
+	background-color: #f8f8f8;
+	&:after{
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 50%;
+		content: '오늘의 사진을 업로드해주세요.';
+		font-size: 1.5rem;
+		color: #888;
+		text-align: center;
+		z-index: 1;
+	}
+	img {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: 100%;
+		min-height: 100%;
+		min-width: 100%;
+		transform: translate(-50%, -50%);
+		z-index: 2;
 	}
 `;
 export default Write;

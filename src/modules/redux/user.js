@@ -6,11 +6,13 @@ const SIGNIN = 'user/SIGNIN';
 const SIGNOUT = 'user/SIGNOUT';
 const SIGNUP = 'user/SIGNUP';
 const MYPAGE = 'user/MYPAGE';
+const IN_ERROR = 'signin/ERROR';
 
 // initial state 
 const initialState = {
   user: [],
   mypage: [],
+  error: undefined,
 }
 
 // action creator
@@ -26,6 +28,9 @@ export const signUp = (user_info) => {
 export const loadMypage = (mypage_data) => {
   return {type: MYPAGE, mypage_data}
 }
+export const setError = (code) => {
+  return {type: IN_ERROR, code}
+}
 
 // middlewares
 export const getUserInfoAxios = () => {
@@ -33,7 +38,6 @@ export const getUserInfoAxios = () => {
     await apis.getUserInfo().then(
       res => {
         const user_info = res.data;
-        console.log(user_info)
         dispatch(signIn(user_info));
       }
     )
@@ -43,7 +47,6 @@ export const signInAxios = (user_info) => {
   return async (dispatch) => {
     await apis.signIn(user_info).then(
       res => {
-        console.log(res) // data.id저장, headers.authorization
         const userNickname = res.data.nickname; 
         const userId = res.data.userId; 
         localStorage.setItem('token', res.headers.authorization); // token 저장
@@ -53,7 +56,13 @@ export const signInAxios = (user_info) => {
       }
     ).catch(
       err => {
-        console.log(err);
+        // console.log(err);
+        if(err.response.status === 400){
+          window.alert('아이디와 비밀번호가 일치하지 않습니다.');
+        }
+        if(err.response.status === 500){
+          window.alert('존재하지 않는 아이디입니다.');
+        }
       }
     )
   }
@@ -71,10 +80,14 @@ export const signUpAxios = (user_info) => {
         console.log(res)
         // await dispatch(signUp(user_info)); 회원 목록 저장할 필요가 없는 듯..?
         // history.push('/');
+        window.location.href = '/signin';
       }
     ).catch(
       err => {
         console.log(err);
+        if(err.response.status === 400){
+          window.alert(err.response.data);
+        }
       }
     )
   }
@@ -109,6 +122,10 @@ export default function reducer(state = initialState, action = {}) {
     }
     case 'user/MYPAGE': {
       return {user: state.user, mypage: [action.mypage_data]};
+    }
+    case 'signin/ERROR': {
+      console.log(action.code, action, '??AS?FAS?F')
+      return {user: state.user, mypage: state.mypage, error: action.code}
     }
     default: {
       return state;

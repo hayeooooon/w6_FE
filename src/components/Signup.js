@@ -11,12 +11,15 @@ import { apis } from "../api";
 const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const location = useLocation();
 	const userInfoState = useSelector(state=>state.user.user);
+	const errorState = useSelector(state=>state.user.error);
 	const [username, setUsername] = useState("");
 	const [pw, setPw] = useState("");
 	const [pwcheck, setPwcheck] = useState('')
 	const [nickname, setNickname] = useState('')
 	const [clicked, setClicked] = useState(false);
+	const [error, setError] = useState(errorState);
 
 	
 	const signUp = async () => {
@@ -37,20 +40,6 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 					pwcheck: pwcheck,
 				};
 				dispatch(signUpAxios(data));
-				// await apis.signUp(data).then(
-				// 	res => {
-				// 		console.log(res.data);
-				// 		setUsername('');
-				// 		setNickname('');
-				// 		setPw('');
-				// 		setPwcheck('');
-				// 		navigate('/signin');
-				// 	}
-				// ).catch(
-				// 	err => {
-				// 		console.error(err);
-				// 	}
-				// )
 				setClicked(false);
 				break;
 			}
@@ -83,11 +72,21 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 
 	useEffect(()=>{
 		setClicked(false);
-		console.log('?')
 	},[])
 
+	useEffect(()=>{
+		setUsername('');
+		setPw('');
+		setPwcheck('');
+		setNickname('');
+		setClicked(false);
+	},[type])
+	console.log('회원가입', location)
+
+	
 	
 	if(loggedIn) return (<Navigate to="/" replace />)
+	if(type === '' || type === undefined) return (<Navigate to="/" replace />)
 	return (
 		<div className="content">
 			<section>
@@ -106,6 +105,7 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 									placeholder="아이디를 입력해주세요."
 									value={username ? username : ''}
 									onChange={(e) => setUsername(e.target.value)}
+									minLength="3"
 								/>
 								{ (clicked && username.trim().length <= 0) && <p className="txt_err">아이디를 입력해주세요.</p>}
 							</InputBox>
@@ -133,6 +133,7 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 									placeholder="비밀번호를 입력해주세요."
 									value={pw ? pw : ''}
 									onChange={(e) => setPw(e.target.value)}
+									minLength="4"
 								/>
 								{ (clicked && pw.trim().length <= 0) && <p className="txt_err">비밀번호를 입력해주세요.</p>}
 								{type === "signup" && (
@@ -142,6 +143,7 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 										placeholder="비밀번호 확인"
 										value={pwcheck ? pwcheck : ''}
 										onChange={(e) => (setPwcheck(e.target.value))}
+										minLength="4"
 									/>
 									{ (clicked && pwcheck.trim().length <= 0) && <p className="txt_err">비밀번호를 입력해주세요.</p>}
 									{ ((clicked && pwcheck.trim().length > 0 && pw.trim() !== pwcheck.trim()) && <p className="txt_err">비밀번호가 일치하지 않습니다.</p>)}

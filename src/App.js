@@ -1,5 +1,5 @@
 import "./App.css";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import styled from "styled-components";
 import { Router, Routes, Route } from "react-router-dom";
 import { useSelector } from 'react-redux';
@@ -7,6 +7,7 @@ import axios from 'axios';
 import {apis} from './api/index';
 
 // components
+import Modal from "./components/Modal";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Main from "./components/Main";
@@ -26,15 +27,11 @@ function App() {
 	 * 마이페이지: Mypage.js
 	 * 로그인/회원가입 Signup.js
 	 */
-
-	const dispatch = useDispatch();
 	const [isLoading, setIsLoading] = useState(true);
-	const [isError, setIsErro] = useState(false);
-
 	const [loggedIn, setLoggedIn] = useState(false);
 	const [userInfo, setUserInfo] = useState({});
-
-	const user = useSelector(state=>state.user.user);
+	const [toggleModal, setToggleModal] = useState(false);
+	const [dataToDelete, setDataToDelete] = useState(null);
 
 	const getUserInfo = async () => {
 		const nickname = await localStorage.getItem('nickname');
@@ -47,13 +44,7 @@ function App() {
 	useEffect(()=>{
 		getUserInfo();
 	},[])
-	console.log('logged in?', loggedIn)
-	
-
-	
-
-	
-
+	console.log(toggleModal, dataToDelete)
 	
 	return (
 		<Wrap className={`App ${isLoading ? 'is_loading' : ''}`}>
@@ -61,16 +52,17 @@ function App() {
 			<Container className="container">
 				<Routes>
 					<Route path="/" element={<Main loggedIn={loggedIn} setLoggedIn={setLoggedIn} userInfo={userInfo} setUserInfo={setUserInfo} />}></Route>
-					<Route path="/write" element={<Write page={'write'} />}></Route> {/* 게시글 등록 */}
-					<Route path="/edit/:postId" element={<Write page={'edit'}/>}></Route>
+					<Route path="/write" element={<Write page={'write'} loggedIn={loggedIn} />}></Route> {/* 게시글 등록 */}
+					<Route path="/edit/:postId" element={<Write page={'edit'} loggedIn={loggedIn}/>}></Route>
 					{/* 게시글 수정 */}
-					<Route path="/detail/:postId" element={<Detail loggedIn={loggedIn} userInfo={userInfo}/>}></Route>
-					<Route path="/mypage" element={<Mypage />}></Route>
-					<Route path="/signup" element={<Signup type="signup" loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUserInfo={setUserInfo} />}></Route> {/* 회원가입 */}
-					<Route path="/signin" element={<Signup type="signin" loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUserInfo={setUserInfo} />}></Route> {/* 로그인 */}
+					<Route path="/detail/:postId" element={<Detail loggedIn={loggedIn} userInfo={userInfo} setToggleModal={setToggleModal} setDataToDelete={setDataToDelete}/>}></Route>
+					<Route path="/mypage" element={<Mypage loggedIn={loggedIn}/>}></Route>
+					<Route path="/signup" element={<Signup type="signup" loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUserInfo={setUserInfo}/>}></Route> {/* 회원가입 */}
+					<Route path="/signin" element={<Signup type="signin" loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUserInfo={setUserInfo}/>}></Route> {/* 로그인 */}
 				</Routes>
 			</Container>
 			<Footer></Footer>
+			<Modal toggle={toggleModal} item={dataToDelete} clearToggle={setToggleModal} clearItem={setDataToDelete}></Modal>
 		</Wrap>
 	);
 }
