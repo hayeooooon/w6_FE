@@ -20,7 +20,6 @@ export const createCommentAxios = (post_id, comment) => {
     return async (dispatch) => {
         apis.createComment(post_id, {comment}).then(
             res => {
-                apis.postdetail()
                 console.log(res);
             }
         ).catch(
