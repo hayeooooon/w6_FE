@@ -12,9 +12,7 @@ import { loadPostsListAxios } from "../modules/redux/haedal";
 import { getUserInfoAxios } from "../modules/redux/user";
 
 const Main = ({ loggedIn, setLoggedIn, userInfo, setUserInfo }) => {
-	// const dispatch = useDispatch();
-	// dispatch(getUserInfoAxios()); 메인 comp에서 로그인 정보 확인 요청을 또 해야하나..?
-	console.log("userInfo", userInfo);
+	
 	return (
 		<div className="content">
 			<TopArea>
@@ -213,16 +211,16 @@ const PostsArea = ({ loggedIn }) => {
 										></span>
 										<div>
 											<div className="score_area">
-												{/* <span>
+												<span>
 													행복지수{" "}
 													<strong>
-														{/* {Object.values(scores[v.happypoint - 1])[1]} */}
+														{Object.values(scores[v.happypoint - 1])[1]}
 													</strong>
 												</span>
 												<br />
 												<strong>
 													{Object.values(scores[v.happypoint - 1])[0]}
-												</strong> */}
+												</strong>
 											</div>
 											<div className="text_area">
 												<span>

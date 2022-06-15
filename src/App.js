@@ -35,7 +35,6 @@ function App() {
 	const [userInfo, setUserInfo] = useState({});
 
 	const user = useSelector(state=>state.user.user);
-	console.log(user)
 
 	const getUserInfo = async () => {
 		const nickname = await localStorage.getItem('nickname');

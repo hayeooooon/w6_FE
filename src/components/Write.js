@@ -55,7 +55,7 @@ const Write = ({ page }) => {
 				formData.append("happypoint", score);
 				formData.append("content", content);
 				if (page === "edit") {
-					// dispatch(updateHappyAxios(param.postId, formData))
+					dispatch(updateHappyAxios(param.postId, formData))
 				}else {
 					dispatch(createPost(formData));
 				}
