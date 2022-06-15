@@ -38,7 +38,7 @@ function App() {
 
 	const getUserInfo = async () => {
 		const nickname = await localStorage.getItem('nickname');
-		const userId = await localStorage.getItem('userId');
+		const userId = await localStorage.getItem('userId')/1;
 		if(nickname && userId){
 			setUserInfo({nickname: nickname, userId: userId});
 			setLoggedIn(true);

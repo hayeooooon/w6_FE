@@ -1,10 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
 import Button from "./Button";
 import img_3 from "../images/img_3.jpeg";
 
-import { loadPostAxios, deleteHappyAxios, createCommentAxios } from "../modules/redux/haedal";
+import {
+	loadPostAxios,
+	deleteHappyAxios,
+	createCommentAxios,
+	updateCommentAxios,
+	deleteCommentAxios,
+} from "../modules/redux/haedal";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -20,64 +26,77 @@ const Detail = ({ loggedIn, userInfo }) => {
 	const thispost = useSelector((state) => state.haedal.post);
 	const scoreEmoji = ["😡", "☹️", "☺️", "😆", "😍"];
 	const scoreCharacter = ["최악", "나쁨", "보통", "좋음", "최상"];
+	const [data, setData] = useState();
+	const commenetRef = useRef();
+	const editCommentRef = useRef();
 
 	useEffect(() => {
 		dispatch(loadPostAxios(param.postId));
 	}, []);
 
-	//todo: 게시물 삭제*****
-	//const deletePost = dispatch(deleteHappyAxios(param.postId));
+	useEffect(() => {
+		if (thispost.length > 0) {
+			const new_comments = thispost[0].comments.map((v) => {
+				const _v = { ...v, edit: false };
+				return _v;
+			});
+			thispost[0].comments = new_comments;
+			thispost[0].comments.sort(function (a,b){ // 댓글 ID 내림차순으로 재정렬
+				return b.commentId-a.commentId
+			})
+			setData(thispost[0]);
+		}
+		if (
+			(data !== undefined && data,
+			data?.comments.length < thispost[0]?.comments.length)
+		) {
+			dispatch(loadPostAxios(param.postId));
+		}
+	}, [thispost]);
 	
-	console.log(thispost)
 
+	if (data === undefined) return <p>로딩 중...</p>;
 	return (
 		<div className="content">
 			<section>
 				<div className="set_inner">
 					<ImageArea>
-						<div style={{ backgroundImage: `url(${thispost[0]?.img})` }}></div>
+						<div style={{ backgroundImage: `url(${data.img})` }}></div>
 					</ImageArea>
 					<ContentArea>
 						<div className="info_area">
 							<p>
-								<span className="nickname">{thispost[0]?.nickname}</span>
+								<span className="nickname">{data.nickname}</span>
 								<span className="score">
 									<em>행복지수</em>
 									<strong>
-										{thispost.length > 0
-											? scoreCharacter[thispost[0].happypoint - 1]
-											: ""}
-										<i>
-											{thispost.length > 0
-												? scoreEmoji[thispost[0].happypoint - 1]
-												: ""}
-										</i>
+										{scoreCharacter[data.happypoint - 1]}
+										<i>{scoreEmoji[data.happypoint - 1]}</i>
 									</strong>
 								</span>
 							</p>
 						</div>
 						<div className="content_area">
-							<p> {thispost.length > 0 ? thispost[0].content : ""}</p>
+							<p>{thispost[0].content}</p>
 						</div>
 					</ContentArea>
-					{loggedIn &&
-						thispost[0]?.userId === userInfo?.userId / 1 && ( // 데이터 연결 후 작성자 일치하는지 확인하는 조건 추가
-							<div
-								className="btn_area"
-								style={{ textAlign: "right", marginTop: "60px" }}
-							>
+					{loggedIn && data?.userId === userInfo?.userId && (
+						<div
+							className="btn_area"
+							style={{ textAlign: "right", marginTop: "60px" }}
+						>
 								<Button onClick ={(e)=>{dispatch(deleteHappyAxios(param.postId))}}>삭제</Button>
-								<Link to={`/edit/${param.postId}`} className="btn primary">
-									수정
-								</Link>
-							</div>
-						)}
+							<Link to={`/edit/${param.postId}`} className="btn primary">
+								수정
+							</Link>
+						</div>
+					)}
 				</div>
 			</section>
 			<section>
 				<div className="set_inner">
 					<SectionTitle>
-						<strong>{thispost[0]?.nickname}</strong>님과 자유롭게 소통해주세요!
+						<strong>{data.nickname}</strong>님과 자유롭게 소통해주세요!
 					</SectionTitle>
 					<CommentArea>
 						{loggedIn && (
@@ -87,48 +106,111 @@ const Detail = ({ loggedIn, userInfo }) => {
 										<div>
 											<textarea
 												type="text"
-												onChange={(e)=>setComment(e.target.value)}
+												ref={commenetRef}
+												value={comment}
+												onChange={(e) => setComment(commenetRef.current?.value)}
 												placeholder="자유롭게 의견을 작성해주세요."
 											></textarea>
 										</div>
 									</InputBox>
 									<div className="btn_box">
-										<Button st="primary" onClick={(e)=>{
-											if(comment.trim().length > 0) dispatch(createCommentAxios(param.postId, comment));
-										}}>작성하기</Button>
+										<Button
+											st="primary"
+											onClick={(e) => {
+												if (comment.trim().length > 0) {
+													dispatch(createCommentAxios(param.postId, comment));
+													setComment("");
+												}
+											}}
+										>
+											작성하기
+										</Button>
 									</div>
 								</InputArea>
 							</div>
 						)}
-						{
-							thispost[0]?.comments.length > 0
-							? (
-								<>
-						{thispost[0].comments.map((v, i) => {
-							return (
-								<div className="comment_view" key={i}>
-									<ul>
-										<li>
-											<span>{v.nickname}</span>
-											<p>{v.comment}</p>
-											<div style={{ marginTop: "20px" }}>
-												<Button height="xs" padding="s">
-													삭제
-												</Button>
-												<Button st="primary" height="xs" padding="s">
-													수정
-												</Button>
-											</div>
-										</li>
-									</ul>
-								</div>
-							);
-						})}
-						</>
-							)
-							:
+						{data.comments.length > 0 ? (
+							<>
+								{data.comments.map((v, i) => {
+									return (
+										<div className="comment_view" key={i}>
+											<ul>
+												<li>
+													<span>{v.nickname}</span>
+													{v.edit ? (
+														<textarea ref={editCommentRef}>{v.comment}</textarea>
+													) : (
+														<p>{v.comment}</p>
+													)}
+													{(v.userId === userInfo?.userId && !v.edit) && (
+														<div style={{ marginTop: "20px" }}>
+															<Button height="xs" padding="s" onClick={()=>dispatch(deleteCommentAxios(v.commentId))}>
+																삭제
+															</Button>
+															<Button
+																st="primary"
+																height="xs"
+																padding="s"
+																onClick={()=>{
+																	const _comments = data.comments.map(item=>{
+																		if(item.commentId === v.commentId){
+																			item.edit = true;
+																			return item
+																		}
+																		item.edit = false;
+																		return item;
+																	})
+																	const _data = {...data};
+																	_data.comments = _comments;
+																	setData(_data);
+																}}
+															>
+																수정
+															</Button>
+														</div>
+													)}
+													{(v.userId === userInfo?.userId && v.edit) && (
+														<div style={{ marginTop: "20px" }}>
+															<Button height="xs" padding="s" onClick={()=>{
+																const _comments = data.comments.map(item=>{
+																	item.edit = false;
+																	return item;
+																})
+																const _data = {...data};
+																_data.comments = _comments;
+																setData(_data);
+																editCommentRef.current = {value: ''}
+															}}>
+																취소
+															</Button>
+															<Button
+																st="primary"
+																height="xs"
+																padding="s"
+																onClick={()=>{
+																	dispatch(updateCommentAxios(v.commentId, editCommentRef.current.value))
+																	const _comments = data.comments.map(item=>{
+																		item.edit = false;
+																		return item;
+																	})
+																	const _data = {...data};
+																	_data.comments = _comments;
+																	setData(_data);
+																	editCommentRef.current = {value: ''}
+																}}>
+																등록
+															</Button>
+														</div>
+													)}
+												</li>
+											</ul>
+										</div>
+									);
+								})}
+							</>
+						) : (
 							<p>등록된 댓글이 없습니다.</p>
-						}
+						)}
 					</CommentArea>
 					<div className="btn_area">
 						<Button width="m" onClick={() => navigate("/")}>
