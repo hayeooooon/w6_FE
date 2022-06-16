@@ -69,6 +69,13 @@ export const loadPostsListAxios = () => { // 전체 게시글 리스트 불러�
 			})
 			.catch((err) => {
 				console.error(err, 'main page posts list error');
+				const alert = async () => {
+					await window.alert(err.response.data);
+					if(err.response.status === 400){
+						window.location.href = '/';
+					}
+				}
+				alert();
 			});
 	};
 };
@@ -84,6 +91,13 @@ export const loadPostAxios = (post_id) => { // 조회할 게시글 불러오기
 		).catch(
 			err => {
 				console.log(err, 'detail page error');
+				const alert = async () => {
+					await window.alert(err.response.data);
+					if(err.response.status === 400){
+						window.location.href = '/';
+					}
+				}
+				alert();
 			}
 		)
 	}
@@ -101,6 +115,13 @@ export const deleteHappyAxios = (post_id) => {
 		).catch(
 			err => {
 				console.log(err);
+				const alert = async () => {
+					await window.alert(err.response.data);
+					if(err.response.status === 400){
+						window.location.href = '/';
+					}
+				}
+				alert();
 			}
 		)
 		if (success) {
@@ -119,7 +140,14 @@ export const createCommentAxios = (post_id, comment) => {
 					}
 			).catch(
 					err => {
-							console.error(err);
+						console.error(err);
+						const alert = async () => {
+							await window.alert(err.response.data);
+							if(err.response.status === 400){
+								window.location.href = '/';
+							}
+						}
+						alert();
 					}
 			)
 	}
@@ -143,6 +171,13 @@ export const createCommentAxios = (post_id, comment) => {
 			).catch(
 				err => {
 					console.error(err, 'updated comment error');
+					const alert = async () => {
+						await window.alert(err.response.data);
+						if(err.response.status === 400){
+							window.location.href = '/';
+						}
+					}
+					alert();
 				}
 			)
 		}
@@ -161,6 +196,13 @@ export const createCommentAxios = (post_id, comment) => {
 			).catch(
 				err => {
 					console.error(err);
+					const alert = async () => {
+						await window.alert(err.response.data);
+						if(err.response.status === 400){
+							window.location.href = '/';
+						}
+					}
+					alert();
 				}
 			)
 		}
