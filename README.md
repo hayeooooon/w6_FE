@@ -13,7 +13,10 @@
 2022.06.10 ~ 2022.06.16
 Front-end : 김하연, 김수진
 Back-end : 함형준, 이준호, 이병관
-
+ 
+ <br>
+ <br>
+ 
 ## 사용 기술 및 라이브러리
 ### Front-end
 - Javascript
@@ -24,10 +27,16 @@ Back-end : 함형준, 이준호, 이병관
 - Styled-component
 ### 배포
 - AWS S3
-
+- 
+ <br>
+ <br>
+ 
 ## 실행 화면
 <iframe width="560" height="315" src="https://www.youtube.com/embed/VpOBCNM2TYo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
+ <br>
+ <br>
+ 
 ## 핵심기능
 ### JWT Token을 활용한 사용자 인증
 - JWT 토큰을 이용하여 로그인 기능 및 인증 기능 구현
