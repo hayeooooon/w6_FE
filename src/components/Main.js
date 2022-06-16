@@ -275,7 +275,7 @@ const PostsArea = ({ loggedIn }) => {
 			</PostsWrap>
 			<RegisterButton
 				onClick={() => {
-					if (!localStorage.getItem("token")) {
+					if (!sessionStorage.getItem("token")) {
 						window.alert("로그인 후 게시글 작성 가능합니다.");
 						return navigate("/signin");
 					}
@@ -367,6 +367,7 @@ const PostItem = styled.li`
 				}
 				&.text_area {
 					text-align: left;
+					word-break: break-all;
 					span {
 						display: block;
 						font-size: 1.3rem;

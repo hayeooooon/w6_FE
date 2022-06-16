@@ -48,7 +48,7 @@ const ModalWrap = styled.div`
 	right: 0;
 	top: 0;
 	bottom: 0;
-	background: rgba(0, 0, 0, 0.6);
+	background: rgba(0, 0, 0, 0.2);
 	z-index: 2;
 `;
 const ModalBox = styled.div`
@@ -60,8 +60,11 @@ const ModalBox = styled.div`
 	margin: 60px auto;
 	box-sizing: border-box;
 	text-align: center;
+	border-radius: 10px;
+	box-shadow: 0 0 20px rgba(0,0,0,.2);
+	border: 1px solid #ddd;
 	h4 {
-		font-size: 16px;
+		font-size: 1.6rem;
 		padding: 30px 0 55px;
 	}
   .btn_area{

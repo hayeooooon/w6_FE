@@ -81,7 +81,6 @@ export const loadPostsListAxios = () => { // 전체 게시글 리스트 불러�
 				console.log(res, 'main page posts list response')
 				const post_list = res.data;
 				dispatch(loadPostsList(post_list));
-				
 			})
 			.catch((err) => {
 				console.error(err, 'main page posts list error');
@@ -105,57 +104,24 @@ export const loadPostAxios = (post_id) => { // 조회할 게시글 불러오기
 	}
 }
 
-export const createPost = (post_data) => {
-	return async () => {
-		const config = {
-			headers: {
-				'Content-Type': 'multipart/form-data'
-			}
-		}
-		await apis.createPost(post_data, config).then(
-			res => {
-				console.log(res, 'post create response')
-			}
-		).catch(
-			err => {
-				console.error(err, 'post create error');
-			}
-		)
-	}
-}
-
-export const updatePostAxios = (post_id, post_data) => { // 게시글 수정
-	return async () => {
-		const config = {
-			headers: {
-				'Content-Type': 'multipart/form-data'
-			}
-		}
-		await apis.updatePost(post_id, post_data, config).then(
-			res => {
-				console.log(res, 'post update response')
-				window.location.href = `/detail/${post_id}`;
-			}
-		).catch(
-			err => {
-				console.error(err, 'post update error');
-			}
-		)
-	}
-}
 //todo: 게시글 삭제*****
 export const deleteHappyAxios = (post_id) => {
 	return async () => {
+		let success = false;
 		await apis.deletePost(post_id).then(
 			res => {
 				console.log(res,'삭제 완료');
-				window.location.href = '/';
+				success = true;
 			}
 		).catch(
 			err => {
 				console.log(err);
 			}
 		)
+		if (success) {
+			await window.alert('게시글이 삭제되었습니다.');
+			window.location.href = '/';
+		}
 	}
 }
 export const createCommentAxios = (post_id, comment) => {

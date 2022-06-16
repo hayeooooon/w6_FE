@@ -9,11 +9,12 @@ import {signOutAxios} from '../modules/redux/user';
 const Header = ({ loggedIn, setLoggedIn, userInfo, setUserInfo}) => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const logout = () => {
+	const logout = async () => {
 		// 로그아웃 이벤트
-		setLoggedIn(false);
-		setUserInfo({});
-		dispatch(signOutAxios());
+		await setLoggedIn(false);
+		await setUserInfo({});
+		await dispatch(signOutAxios());
+		await window.alert('로그아웃 되었습니다.');
 		navigate('/');
 	};
 	const header_btns = loggedIn ? (
@@ -60,6 +61,7 @@ const HeaderWrap = styled.header`
 	box-sizing: border-box;
 	z-index: 2;
 	background-color: #fff;
+	border-bottom: 1px solid #f5f2ed;
 `;
 const Inner = styled.div`
 	display: flex;

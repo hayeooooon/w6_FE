@@ -29,7 +29,7 @@ const Mypage = ({loggedIn}) => {
 		setMypage(datas.length > 0 ? datas[0] : null);
 	}, [datas]);
 
-	if (!localStorage.getItem('token')) {
+	if (!sessionStorage.getItem('token')) {
 		window.alert('마이페이지는 로그인 후 이용 가능합니다.');
 		return <Navigate to="/" replace/>
 	}
@@ -56,6 +56,7 @@ const Mypage = ({loggedIn}) => {
 					<div className="posts_area">
 						<SectionSubTitle>
 							<span>{mypage?.nickname} 님이 작성한 게시글</span>
+							<Link to="/write" className="btn primary">게시글 작성하기</Link>
 						</SectionSubTitle>
 						<PostsWrap>
 							<PostsGroup>
@@ -139,6 +140,12 @@ const SectionSubTitle = styled.p`
 			background-color: #f2b43f;
 			z-index: -1;
 		}
+	}
+	.btn{
+		position: absolute;
+		right: 0;
+		top: 50%;
+		transform: translateY(-50%);
 	}
 `;
 const PostsWrap = styled.div`
