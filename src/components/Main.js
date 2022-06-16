@@ -123,7 +123,7 @@ const RankingArea = () => {
 							return (
 								<li key={i}>
 									<span>
-										<strong>{i + 1}</strong>st
+										<strong>{i + 1}</strong>{ i === 0 ? 'st' : i === 1 ? 'nd' : i === 2 ? 'rd' : 'th'}
 									</span>
 									<p>{v.nickname}</p>
 								</li>
