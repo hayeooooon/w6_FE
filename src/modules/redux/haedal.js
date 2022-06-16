@@ -15,22 +15,7 @@ const UPDATE_COMMENT = "comment/UPDATE";
 
 
 const initialState = {
-	list: [
-		{
-			happypoint: "1",
-			id: "0",
-			nickname: "멍멍이",
-			img: "",
-			content: "하하하",
-		},
-		{
-			happypoint: "2",
-			id: "1",
-			nickname: "삐약",
-			img: "",
-			content: "하하gg하",
-		},
-	],
+	list: [],
 	post: [],
 };
 

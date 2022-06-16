@@ -3,8 +3,6 @@ import styled, {keyframes} from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	loadPostAxios,
-	updatePostAxios,
-	createPost,
 } from "../modules/redux/haedal";
 import { useNavigate, Navigate, useParams } from "react-router-dom";
 

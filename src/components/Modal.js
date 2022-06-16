@@ -6,7 +6,6 @@ import { deleteHappyAxios } from "../modules/redux/haedal";
 
 const Modal = ({ toggle, item, clearToggle, clearItem }) => {
 	const dispatch = useDispatch();
-	console.log(toggle);
 	return (
 		<ModalWrap show={toggle ? true : false}>
 			<ModalBox>

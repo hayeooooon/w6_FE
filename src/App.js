@@ -1,11 +1,7 @@
 import "./App.css";
-import React, {useEffect, useState, useRef} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import { Router, Routes, Route } from "react-router-dom";
-import { useSelector } from 'react-redux';
-import axios from 'axios';
-import {apis} from './api/index';
-import { getUserInfoAxios } from './modules/redux/user';
+import { Routes, Route } from "react-router-dom";
 
 // components
 import Modal from "./components/Modal";
@@ -16,8 +12,6 @@ import Write from "./components/Write";
 import Detail from "./components/Detail";
 import Mypage from "./components/Mypage";
 import Signup from "./components/Signup";
-import Button from "./components/Button";
-import { useDispatch } from "react-redux";
 
 function App() {
 	/**
@@ -52,7 +46,6 @@ function App() {
 	useEffect(()=>{
 		getUserInfo();
 	},[])
-	console.log(toggleModal, dataToDelete)
 	
 	return (
 		<Wrap className={`App ${isLoading ? 'is_loading' : ''}`}>
