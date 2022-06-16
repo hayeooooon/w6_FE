@@ -2,25 +2,21 @@ import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
 import Button from "./Button";
-import img_3 from "../images/img_3.jpeg";
 
 import {
 	loadPostAxios,
-	deleteHappyAxios,
 	createCommentAxios,
 	updateCommentAxios,
 	deleteCommentAxios,
-	loadCommentsAxios,
 } from "../modules/redux/haedal";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link, Navigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
 const Detail = ({ loggedIn, userInfo, setToggleModal, setDataToDelete }) => {
 	const dispatch = useDispatch(null);
 	const param = useParams();
 	const navigate = useNavigate();
-	const [post, setPost] = useState();
 
 	//todo: 메인-디테일 연결(postid&post)
 	const thispost = useSelector((state) => state.haedal.post);

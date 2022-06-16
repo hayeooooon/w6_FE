@@ -4,12 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { apis } from "../api/index";
 
-import img_1 from "../images/img_1.jpeg";
-import img_2 from "../images/img_2.jpeg";
-import img_3 from "../images/img_3.jpeg";
-import img_4 from "../images/img_4.jpeg";
 import { loadPostsListAxios } from "../modules/redux/haedal";
-import { getUserInfoAxios } from "../modules/redux/user";
 
 const Main = ({ loggedIn, setLoggedIn, userInfo, setUserInfo }) => {
 	return (
@@ -220,8 +215,10 @@ const PostsArea = ({ loggedIn }) => {
 	}, []);
 
 	useEffect(() => {
+		datas.sort(function (a, b) {
+			return b.postId - a.postId;
+		});
 		setPosts(datas);
-		console.log(posts, "posts");
 	}, [datas]);
 
 	const scores = [

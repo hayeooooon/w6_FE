@@ -3,10 +3,6 @@ import styled from "styled-components";
 import { Link, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import img_1 from "../images/img_1.jpeg";
-import img_2 from "../images/img_2.jpeg";
-import img_3 from "../images/img_3.jpeg";
-import img_4 from "../images/img_4.jpeg";
 import { loadMypageAxios } from "../modules/redux/user";
 
 const Mypage = ({loggedIn}) => {

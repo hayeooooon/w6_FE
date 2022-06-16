@@ -39,7 +39,6 @@ export const signInAxios = (user_info) => {
       res => {
         const userNickname = res.data.nickname; 
         const userId = res.data.userId; 
-        localStorage.clear();
         const set_expiry = 3 * 60 * 60 * 1000;
         const expiry = Date.now() + set_expiry;
         sessionStorage.setItem('token', res.headers.authorization);
@@ -69,7 +68,6 @@ export const signInAxios = (user_info) => {
 export const signOutAxios = () => {
   return async (dispatch) => {
     sessionStorage.clear();
-    localStorage.clear();
     dispatch(signOut());
   }
 }

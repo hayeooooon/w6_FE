@@ -1,17 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useLocation, useNavigate, Link } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { signInAxios, signUpAxios } from "../modules/redux/user";
 
 import Button from "./Button";
-import { apis } from "../api";
 
 
 const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const location = useLocation();
 	const userInfoState = useSelector(state=>state.user.user);
 	const errorState = useSelector(state=>state.user.error);
 	const [username, setUsername] = useState("");
@@ -64,7 +62,6 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 	};
 	useEffect(()=>{
 		if(userInfoState.length > 0){
-			console.log('got user info')
 			setLoggedIn(true);
 			setUserInfo(...userInfoState);
 		}
@@ -81,7 +78,6 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 		setNickname('');
 		setClicked(false);
 	},[type])
-	console.log('회원가입', location)
 
 	
 	
@@ -154,10 +150,7 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 						<div className="btn_area">
 							<Button width="m" onClick={()=>{navigate('/')}}>취소</Button>
 							{type === "signup" ? (
-								<Button width="m" st="primary" onClick={signUp}>
-									<Link to="/signin">
-									가입하기
-								</Link></Button>
+								<Button width="m" st="primary" onClick={signUp}>가입하기</Button>
 							) : (
 								<Button width="m" st="primary" onClick={signIn}>
 									로그인
