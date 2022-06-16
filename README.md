@@ -48,4 +48,10 @@ https://youtu.be/VpOBCNM2TYo
 - 게시글 내 댓글 등록 및 수정, 삭제 기능
 - 로그인된 사용자만 게시글 및 댓글 등록/수정/삭제 가능
 
+<br>
+<br>
+
+## 관련 링크
+- <a href="https://www.notion.so/tukkit/2-8-709e61c4fece42139845a00bf41fd07c" target="_blank"> [노션] 프로젝트 걔획 수립 & 진행상황 </a>
+- <a href="https://github.com/hyeongjun-Ham/mini" target="_blank"> Back-end Github </a>
 
