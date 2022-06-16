@@ -167,7 +167,7 @@ const Write = ({ page, loggedIn }) => {
 							<InputLabel>PHOTO</InputLabel>
 							<InputBox>
 								<label>
-									<input type="file" onChange={uploadImg} ref={fileInput} />
+									<input type="file" onChange={uploadImg} ref={fileInput} accept=".jpg, .png" />
 									<Attachment>
 										<p>{filename}</p>
 										<Button type="button" st="primary">이미지 업로드</Button>
