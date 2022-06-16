@@ -87,7 +87,11 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 		<div className="content">
 			<section>
 				<div className="set_inner">
-					<Form onSubmit={(e) => e.preventDefault()}>
+					<Form onSubmit={(e) => {
+						e.preventDefault(); 
+						window.alert('submit?')
+						return false;
+					}}>
 						{type === "signup" ? (
 							<SectionTitle>Happy Runner로 등록하세요!</SectionTitle>
 						) : (
@@ -148,11 +152,11 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 							</InputBox>
 						</InputArea>
 						<div className="btn_area">
-							<Button width="m" onClick={()=>{navigate('/')}}>취소</Button>
+							<Button type="button" width="m" onClick={()=>{navigate('/')}}>취소</Button>
 							{type === "signup" ? (
-								<Button width="m" st="primary" onClick={signUp}>가입하기</Button>
+								<Button type="button" width="m" st="primary" onClick={signUp}>가입하기</Button>
 							) : (
-								<Button width="m" st="primary" onClick={signIn}>
+								<Button type="button" width="m" st="primary" onClick={signIn}>
 									로그인
 								</Button>
 							)}

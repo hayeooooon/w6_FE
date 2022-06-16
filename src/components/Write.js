@@ -68,6 +68,10 @@ const Write = ({ page, loggedIn }) => {
 						await apis.updatePost(param.postId, formData, config);
 					}catch(err){
 						console.error(err, 'post update error');
+						await window.alert(err.response.data);
+						if(err.response.status === 400){
+							navigate('/')
+						}
 					}finally{
 						setTimeout(()=>{
 							navigate(`/detail/${param.postId}`);
@@ -82,6 +86,10 @@ const Write = ({ page, loggedIn }) => {
 						post_id = res.data.postId;
 					} catch (err) {
 						console.error(err, 'post create error');
+						await window.alert(err.response.data);
+						if(err.response.status === 400){
+							navigate('/')
+						}
 					} finally {
 						setTimeout(()=>{
 							navigate(`/detail/${post_id}`);
@@ -148,10 +156,10 @@ const Write = ({ page, loggedIn }) => {
 							<InputLabel>PHOTO</InputLabel>
 							<InputBox>
 								<label>
-									<input type="file" onChange={uploadImg} ref={fileInput} />
+									<input type="file" onChange={uploadImg} ref={fileInput} accept=".jpg, .png" />
 									<Attachment>
 										<p>{filename}</p>
-										<Button st="primary">이미지 업로드</Button>
+										<Button type="button" st="primary">이미지 업로드</Button>
 									</Attachment>
 								</label>
 							</InputBox>
@@ -186,19 +194,19 @@ const Write = ({ page, loggedIn }) => {
 					<div className="btn_area">
 						{page === "edit" ? (
 							<>
-								<Button width="m" onClick={() => navigate(-1)}>
+								<Button type="button" width="m" onClick={() => navigate(-1)}>
 									취소
 								</Button>
-								<Button width="m" st="primary" onClick={checkValidation}>
+								<Button type="button" width="m" st="primary" onClick={checkValidation}>
 									수정하기
 								</Button>
 							</>
 						) : (
 							<>
-								<Button width="m" onClick={() => navigate("/")}>
+								<Button type="button" width="m" onClick={() => navigate("/")}>
 									취소
 								</Button>
-								<Button width="m" st="primary" onClick={checkValidation}>
+								<Button type="button" width="m" st="primary" onClick={checkValidation}>
 									등록하기
 								</Button>
 							</>
