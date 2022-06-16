@@ -5,6 +5,7 @@ import { Router, Routes, Route } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import {apis} from './api/index';
+import { getUserInfoAxios } from './modules/redux/user';
 
 // components
 import Modal from "./components/Modal";
@@ -34,8 +35,15 @@ function App() {
 	const [dataToDelete, setDataToDelete] = useState(null);
 
 	const getUserInfo = async () => {
-		const nickname = await localStorage.getItem('nickname');
-		const userId = await localStorage.getItem('userId')/1;
+		const nickname = await sessionStorage.getItem('nickname');
+		const userId = await sessionStorage.getItem('userId')/1;
+		const expiry = await sessionStorage.getItem('expiry');
+		if( Date.now() > expiry){
+			window.sessionStorage.clear();
+			setUserInfo({});
+			setLoggedIn(false);
+			return;
+		}
 		if(nickname && userId){
 			setUserInfo({nickname: nickname, userId: userId});
 			setLoggedIn(true);

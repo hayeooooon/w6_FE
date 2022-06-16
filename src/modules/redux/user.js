@@ -33,30 +33,28 @@ export const setError = (code) => {
 }
 
 // middlewares
-export const getUserInfoAxios = () => {
-  return async (dispatch) => {
-    await apis.getUserInfo().then(
-      res => {
-        const user_info = res.data;
-        dispatch(signIn(user_info));
-      }
-    )
-  }
-}
 export const signInAxios = (user_info) => {
   return async (dispatch) => {
     await apis.signIn(user_info).then(
       res => {
         const userNickname = res.data.nickname; 
         const userId = res.data.userId; 
-        localStorage.setItem('token', res.headers.authorization); // token 저장
-        localStorage.setItem("nickname", JSON.stringify(userNickname));
-        localStorage.setItem("userId", JSON.stringify(userId));
-        dispatch(signIn({nickname: userNickname, userId: userId}));
+        localStorage.clear();
+        const set_expiry = 3 * 60 * 60 * 1000;
+        const expiry = Date.now() + set_expiry;
+        sessionStorage.setItem('token', res.headers.authorization);
+        sessionStorage.setItem("nickname", JSON.stringify(userNickname));
+        sessionStorage.setItem("userId", JSON.stringify(userId));
+        sessionStorage.setItem("expiry", JSON.stringify(expiry));
+        const signInSucceed = async() => {
+          await dispatch(signIn({nickname: userNickname, userId: userId}));
+          window.location.href = '/';
+        }
+        signInSucceed();
       }
     ).catch(
       err => {
-        // console.log(err);
+        console.error(err);
         if(err.response.status === 400){
           window.alert('아이디와 비밀번호가 일치하지 않습니다.');
         }
@@ -67,8 +65,10 @@ export const signInAxios = (user_info) => {
     )
   }
 }
+
 export const signOutAxios = () => {
   return async (dispatch) => {
+    sessionStorage.clear();
     localStorage.clear();
     dispatch(signOut());
   }
@@ -80,6 +80,7 @@ export const signUpAxios = (user_info) => {
         console.log(res)
         // await dispatch(signUp(user_info)); 회원 목록 저장할 필요가 없는 듯..?
         // history.push('/');
+        await window.alert('회원가입이 완료되었습니다.');
         window.location.href = '/signin';
       }
     ).catch(

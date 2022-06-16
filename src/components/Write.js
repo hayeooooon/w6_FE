@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	loadPostAxios,
@@ -8,7 +8,9 @@ import {
 } from "../modules/redux/haedal";
 import { useNavigate, Navigate, useParams } from "react-router-dom";
 
+import { apis } from "../api/index";
 import Button from "./Button";
+import ic_loading from "../images/ic_loading.png";
 
 const Write = ({ page, loggedIn }) => {
 	const navigate = useNavigate();
@@ -28,6 +30,7 @@ const Write = ({ page, loggedIn }) => {
 	const inputs = [score, filename, content];
 	const refs = [scoreInput, fileInput, contentInput];
 	const preview = useRef();
+	const [isLoading, setIsLoading] = useState(false);
 
 	//todo: 이미지 업로드
 	const uploadImg = (e) => {
@@ -44,7 +47,7 @@ const Write = ({ page, loggedIn }) => {
 	};
 
 	//todo: 게시글내용입력
-	const checkValidation = () => {
+	const checkValidation = async () => {
 		setClicked(true);
 		for (let i = 0; i < inputs.length; i++) {
 			if (inputs[i] === "" || inputs[i] === undefined) {
@@ -56,10 +59,37 @@ const Write = ({ page, loggedIn }) => {
 				formData.append("img", file);
 				formData.append("happypoint", score);
 				formData.append("content", content);
+				const config = {
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
+				};
 				if (page === "edit") {
-					dispatch(updatePostAxios(param.postId, formData));
+					setIsLoading(true);
+					try{
+						await apis.updatePost(param.postId, formData, config);
+					}catch(err){
+						console.error(err, 'post update error');
+					}finally{
+						setTimeout(()=>{
+							navigate(`/detail/${param.postId}`);
+							setIsLoading(false);
+						}, 1000)
+					}
 				} else {
-					dispatch(createPost(formData));
+					let post_id = null;
+					try {
+						setIsLoading(true);
+						const res = await apis.createPost(formData, config);
+						post_id = res.data.postId;
+					} catch (err) {
+						console.error(err, 'post create error');
+					} finally {
+						setTimeout(()=>{
+							navigate(`/detail/${post_id}`);
+							setIsLoading(false);
+						}, 1000)
+					}
 				}
 				setClicked(false);
 				return;
@@ -82,7 +112,7 @@ const Write = ({ page, loggedIn }) => {
 		}
 	}, [post_data]);
 
-	if (!localStorage.getItem('token')) {
+	if (!sessionStorage.getItem("token")) {
 		window.alert("게시글 작성 및 편집은 로그인 후 이용 가능합니다.");
 		return <Navigate to="/" replace />;
 	}
@@ -113,7 +143,7 @@ const Write = ({ page, loggedIn }) => {
 								})}
 							</InputBox>
 							{clicked && (score === "" || score === undefined) && (
-								<p className="txt_err">오늘의 컨디션을 선택해주세요!</p>
+								<p className="txt_err">오늘의 행복 지수를 선택해주세요!</p>
 							)}
 						</InputArea>
 						<InputArea className="input_area file">
@@ -130,8 +160,10 @@ const Write = ({ page, loggedIn }) => {
 							{clicked && (filename === "" || filename === undefined) && (
 								<p className="txt_err">오늘의 사진을 첨부해주세요!</p>
 							)}
-							<InputLabel style={{marginTop: '30px'}}>PREVIEW</InputLabel>
-							<PreviewArea className={preview.current?.value ? 'has_photo' : ''}>
+							<InputLabel style={{ marginTop: "30px" }}>PREVIEW</InputLabel>
+							<PreviewArea
+								className={preview.current?.value ? "has_photo" : ""}
+							>
 								<img src="" ref={preview} />
 							</PreviewArea>
 						</InputArea>
@@ -171,12 +203,14 @@ const Write = ({ page, loggedIn }) => {
 								<Button width="m" st="primary" onClick={checkValidation}>
 									등록하기
 								</Button>
-									
 							</>
 						)}
 					</div>
 				</div>
 			</section>
+			{
+				isLoading && (<LoadingWrap><div><img src={ic_loading} alt="loading"></img><p>게시글을 저장중입니다.</p></div></LoadingWrap>)
+			}
 		</div>
 	);
 };
@@ -290,12 +324,12 @@ const PreviewArea = styled.div`
 	/* margin: 0 auto; */
 	overflow: hidden;
 	background-color: #f8f8f8;
-	&:after{
+	&:after {
 		position: absolute;
 		left: 0;
 		right: 0;
 		top: 50%;
-		content: '오늘의 사진을 업로드해주세요.';
+		content: "오늘의 사진을 업로드해주세요.";
 		font-size: 1.5rem;
 		color: #888;
 		text-align: center;
@@ -310,6 +344,45 @@ const PreviewArea = styled.div`
 		min-width: 100%;
 		transform: translate(-50%, -50%);
 		z-index: 2;
+	}
+`;
+const loadingAnimation = keyframes`
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+`;
+const LoadingWrap = styled.div`
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 2;
+	& > div {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		right: 0;
+		width: 320px;
+		transform: translateY(-50%);
+		padding: 40px 20px 50px;
+		margin: 0 auto;
+		font-size: 1.6rem;
+		background-color: #fff;
+		box-shadow: 0 0 20px rgba(0,0,0,.2);
+		border: 1px solid #ddd;
+		text-align: center;
+		font-weight: 700;
+		border-radius: 10px;
+	}
+	img{
+		display: inline-block;
+		max-width: 55px;
+		margin-bottom: 20px;
+		animation: ${loadingAnimation} 1s linear infinite;
 	}
 `;
 export default Write;

@@ -129,7 +129,7 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 							<InputLabel>PASSWORD</InputLabel>
 							<InputBox className="input_box">
 								<input
-									type="text"
+									type="password"
 									placeholder="비밀번호를 입력해주세요."
 									value={pw ? pw : ''}
 									onChange={(e) => setPw(e.target.value)}
@@ -139,7 +139,7 @@ const Signup = ({ type, loggedIn, setLoggedIn, setUserInfo }) => {
 								{type === "signup" && (
 									<>
 									<input
-										type="text"
+										type="password"
 										placeholder="비밀번호 확인"
 										value={pwcheck ? pwcheck : ''}
 										onChange={(e) => (setPwcheck(e.target.value))}

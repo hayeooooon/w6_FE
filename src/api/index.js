@@ -3,14 +3,13 @@ import axios from 'axios';
 const api = axios.create({
 	baseURL: 'http://3.35.230.132',
 });
-api.defaults.headers.common['Authorization'] = localStorage.getItem('token');
+api.defaults.headers.common['Authorization'] = sessionStorage.getItem('token');
 
 
 export const apis = {
 	// user
 	signUp: (data) => api.post('/user/signup', data),
 	signIn: (data) => api.post('/user/login', data),
-	userInfo: () => api.get('/api/auth'),
 	signOut: () => api.post('/user/logout'),
 	mypage: () => api.get('/api/mypage'),
 
