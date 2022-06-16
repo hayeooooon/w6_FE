@@ -211,7 +211,10 @@ const PostsArea = ({ loggedIn }) => {
 	const datas = useSelector((state) => state.haedal.list);
 	const [posts, setPosts] = useState([]);
 	useEffect(() => {
-		dispatch(loadPostsListAxios());
+		dispatch(loadPostsListAxios(true));
+		return () => {
+			dispatch(loadPostsListAxios(false));
+		}
 	}, []);
 
 	useEffect(() => {

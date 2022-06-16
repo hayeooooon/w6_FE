@@ -7,6 +7,7 @@ const LOADCONTENT = "haedal/LOADCONTENT";
 const DELETECONTENT = "haedal/DELETE";
 const LOAD_LIST = "haedal/LOAD_LIST";
 const LOAD_SINGLE = "haedal/LOAD_SINGLE";
+const RESET_POST = "haedal/RESET";
 
 //comment
 const CREATE_COMMENT = "comment/CREATE";
@@ -58,10 +59,15 @@ export const updateComment = (new_comments) => {
 	return {type: UPDATE_COMMENT, new_comments}
 }
 
+export const resetPostsList = () => {
+	return {type: RESET_POST}
+}
+
 
 // Middlewares
-export const loadPostsListAxios = () => { // 전체 게시글 리스트 불러오기
+export const loadPostsListAxios = (mount) => { // 전체 게시글 리스트 불러오기
 	return async (dispatch) => {
+		if(mount){
 		await apis.postList().then((res) => {
 				console.log(res, 'main page posts list response')
 				const post_list = res.data;
@@ -77,6 +83,9 @@ export const loadPostsListAxios = () => { // 전체 게시글 리스트 불러�
 				}
 				alert();
 			});
+		}else{
+			dispatch(resetPostsList())
+		}
 	};
 };
 
@@ -237,6 +246,9 @@ export default function reducer(state = initialState, action = {}) {
 		case "haedal/LOAD_SINGLE": {
 			const post_data = [action.post_data];
 			return { list: state.list, post: post_data};
+		}
+		case "haedal/RESET": {
+			return {list: [], post: []};
 		}
 
 		// 코멘트 추가

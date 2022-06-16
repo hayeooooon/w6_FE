@@ -62,21 +62,27 @@ const Write = ({ page, loggedIn }) => {
 						"Content-Type": "multipart/form-data",
 					},
 				};
+				let isError = false;
 				if (page === "edit") {
 					setIsLoading(true);
 					try{
 						await apis.updatePost(param.postId, formData, config);
 					}catch(err){
 						console.error(err, 'post update error');
+						isError = true;
 						await window.alert(err.response.data);
 						if(err.response.status === 400){
 							navigate('/')
 						}
 					}finally{
-						setTimeout(()=>{
-							navigate(`/detail/${param.postId}`);
-							setIsLoading(false);
-						}, 1000)
+						if(!isError){
+							setTimeout(()=>{
+								navigate(`/detail/${param.postId}`);
+								setIsLoading(false);
+							}, 1000)
+						}
+						isError = false;
+						setIsLoading(false);
 					}
 				} else {
 					let post_id = null;
@@ -86,15 +92,20 @@ const Write = ({ page, loggedIn }) => {
 						post_id = res.data.postId;
 					} catch (err) {
 						console.error(err, 'post create error');
+						isError = true;
 						await window.alert(err.response.data);
 						if(err.response.status === 400){
 							navigate('/')
 						}
 					} finally {
-						setTimeout(()=>{
-							navigate(`/detail/${post_id}`);
-							setIsLoading(false);
-						}, 1000)
+						if(!isError){
+							setTimeout(()=>{
+								navigate(`/detail/${post_id}`);
+								setIsLoading(false);
+							}, 1000)
+						}
+						isError = false;
+						setIsLoading(false);
 					}
 				}
 				setClicked(false);
@@ -156,7 +167,7 @@ const Write = ({ page, loggedIn }) => {
 							<InputLabel>PHOTO</InputLabel>
 							<InputBox>
 								<label>
-									<input type="file" onChange={uploadImg} ref={fileInput} accept=".jpg, .png" />
+									<input type="file" onChange={uploadImg} ref={fileInput} />
 									<Attachment>
 										<p>{filename}</p>
 										<Button type="button" st="primary">이미지 업로드</Button>
